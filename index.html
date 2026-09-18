@@ -774,16 +774,24 @@
     }
 
     .prod-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
+      width: 40px;
+      height: 40px;
+      border-radius: 9px;
       background: var(--item-bg);
       border: 1px solid var(--border-color);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: 18px;
       flex-shrink: 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .prod-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .prod-title {
@@ -796,6 +804,344 @@
       font-size: 11px;
       color: var(--text-muted);
       font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ==========================================================================
+       PRODUCT MULTI-LAYOUTS & IMAGE SYSTEM STYLES
+       ========================================================================== */
+    
+    /* Layout Switcher Buttons */
+    .layout-toggle-group {
+      display: inline-flex;
+      align-items: center;
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--btn-radius);
+      padding: 3px;
+      gap: 3px;
+    }
+    .layout-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: transparent;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: var(--transition-base);
+    }
+    .layout-toggle-btn:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .layout-toggle-btn.active {
+      background: var(--card-bg);
+      color: var(--primary);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+      font-weight: 700;
+    }
+
+    /* Product Grid Layout */
+    .products-grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+      width: 100%;
+    }
+    
+    .product-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--card-radius);
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.22s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.22s ease;
+      position: relative;
+    }
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--card-hover-shadow);
+      border-color: var(--border-hover);
+    }
+
+    /* Product Card Image Container */
+    .product-card-img-wrap {
+      width: 100%;
+      height: 175px;
+      position: relative;
+      background: var(--item-bg);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .product-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .product-card:hover .product-card-img {
+      transform: scale(1.05);
+    }
+    .product-card-img-fallback {
+      font-size: 48px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--item-bg), var(--primary-light));
+      color: var(--text-primary);
+    }
+
+    /* Card Floating Badges */
+    .product-card-badge-left {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 2;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+      backdrop-filter: blur(8px);
+    }
+    .product-card-badge-right {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 2;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+      backdrop-filter: blur(8px);
+    }
+
+    /* Card Body */
+    .product-card-body {
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 10px;
+    }
+    .product-card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .product-card-sku {
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    .product-card-unit {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .product-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 40px;
+      margin: 0;
+    }
+
+    /* Price and Margin Row */
+    .product-card-price-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-top: 2px;
+    }
+    .product-card-price {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -0.02em;
+    }
+    .product-card-cost {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+    .product-card-margin {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 6px;
+      background: var(--success-light);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+
+    /* Stock Metric Bar inside card */
+    .product-card-stock-info {
+      background: var(--item-bg);
+      border-radius: 9px;
+      padding: 9px 12px;
+      border: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .product-card-stock-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11.5px;
+    }
+    .product-card-stock-val {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* Card Action Footer */
+    .product-card-footer {
+      padding: 12px 18px;
+      border-top: 1px solid var(--border-color);
+      background: var(--table-th-bg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .product-card-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Compact Grid Layout */
+    .products-compact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+      width: 100%;
+    }
+    .product-compact-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+      transition: var(--transition-base);
+    }
+    .product-compact-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--card-shadow);
+    }
+    .product-compact-thumb {
+      width: 100%;
+      height: 120px;
+      border-radius: 8px;
+      background: var(--item-bg);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      position: relative;
+    }
+    .product-compact-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .product-compact-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .product-compact-price {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    /* Modal Image Picker & Dropzone */
+    .product-image-dropzone {
+      border: 2px dashed var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      background: var(--item-bg);
+      text-align: center;
+      transition: var(--transition-base);
+      cursor: pointer;
+      position: relative;
+    }
+    .product-image-dropzone:hover, .product-image-dropzone.dragover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+    .product-image-preview-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .product-image-preview-box {
+      width: 90px;
+      height: 90px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: var(--card-bg);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .product-image-preview-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .product-image-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    /* POS Item Image */
+    .pos-item-thumb {
+      width: 100%;
+      height: 72px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--item-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+    .pos-item-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     /* Stock Status Badges */
@@ -1656,7 +2002,6 @@
       * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
-        color-adjust: exact !important;
       }
 
       /* Cleanly hide UI chrome */
@@ -2061,6 +2406,14 @@
       .pos-container { grid-template-columns: 1fr; }
       .pos-cart-panel { position: static; height: auto; }
       .grid-2-1, .grid-1-1 { grid-template-columns: 1fr; }
+      .products-grid-container {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 16px;
+      }
+      .products-compact-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 12px;
+      }
     }
 
     @media (max-width: 768px) {
@@ -2152,6 +2505,21 @@
       .pos-container {
         padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
       }
+
+      /* Responsive product grids */
+      .products-grid-container {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 14px;
+      }
+      .layout-toggle-group {
+        width: 100%;
+        justify-content: space-around;
+      }
+      .layout-toggle-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 7px 8px;
+      }
     }
 
     @media (max-width: 540px) {
@@ -2236,6 +2604,19 @@
       }
       .mobile-nav-pos-center .mobile-nav-pos-icon {
         font-size: 19px;
+      }
+
+      /* Single-column on narrow phones for full card impact */
+      .products-grid-container {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+      .products-compact-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .product-card-img-wrap {
+        height: 190px;
       }
     }
   </style>
@@ -2398,6 +2779,9 @@
       </div>
     </aside>
 
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div class="sidebar-backdrop no-print" id="sidebarBackdrop" onclick="toggleSidebar(false)"></div>
+
     <!-- ==========================================================================
          MAIN WORKSPACE
          ========================================================================== -->
@@ -2406,30 +2790,30 @@
       <!-- Top Header -->
       <header class="top-header">
         <div class="header-left">
-          <button class="btn-menu-toggle" onclick="toggleSidebar()">☰</button>
-          <div class="global-search-box" onclick="openGlobalSearchModal()">
+          <button class="btn-menu-toggle" id="btnMenuToggle" onclick="toggleSidebar()" aria-label="Open Navigation Menu">☰</button>
+          <div class="global-search-box" onclick="openGlobalSearchModal()" title="Search anything (⌘K)">
             <span class="search-icon-svg">🔍</span>
-            <input type="text" class="search-input-field" placeholder="Global search: products, SKU, invoices, contacts..." readonly>
+            <input type="text" class="search-input-field" placeholder="Global search: products, SKU, invoices..." readonly>
             <span class="search-shortcut">⌘K</span>
           </div>
         </div>
 
         <div class="header-right">
           <!-- Notification Bell -->
-          <button class="header-btn" onclick="openNotificationDrawer()" title="Alerts & Low Stock">
+          <button class="header-btn" onclick="openNotificationDrawer()" title="Alerts & Low Stock" aria-label="Alerts and notifications">
             <span>🔔</span>
             <span class="header-badge-count" id="headerNotifBadge">0</span>
           </button>
 
           <!-- Light / Dark Mode Toggle -->
-          <button class="header-btn" onclick="toggleDarkMode()" title="Toggle Light / Dark Mode">
+          <button class="header-btn" onclick="toggleDarkMode()" title="Toggle Light / Dark Mode" aria-label="Toggle dark mode">
             <span id="headerDarkIcon">🌙</span>
           </button>
 
           <!-- Quick Action: POS Sale -->
-          <button class="btn-quick-sale" onclick="navigate('pos')">
-            <span>＋</span>
-            <span>New Sale / POS</span>
+          <button class="btn-quick-sale" onclick="navigate('pos')" title="New POS Sale" aria-label="Open POS New Sale">
+            <span class="quick-sale-icon">＋</span>
+            <span class="quick-sale-text">New Sale / POS</span>
           </button>
         </div>
       </header>
@@ -2438,6 +2822,41 @@
       <main class="view-content" id="appViewContainer">
         <!-- Views rendered here by AppRouter -->
       </main>
+
+      <!-- Fully Functional Mobile Bottom Navigation Bar -->
+      <nav class="mobile-bottom-nav no-print" id="mobileBottomNav" aria-label="Mobile Navigation">
+        <!-- Tab 1: Dashboard -->
+        <button class="mobile-nav-item active" id="mobNavDashboard" data-view="dashboard" onclick="navigate('dashboard')" aria-label="Dashboard">
+          <span class="mobile-nav-icon">📊</span>
+          <span class="mobile-nav-label">Dashboard</span>
+        </button>
+
+        <!-- Tab 2: Products / Inventory -->
+        <button class="mobile-nav-item" id="mobNavProducts" data-view="products" onclick="navigate('products')" aria-label="Products">
+          <span class="mobile-nav-icon">📦</span>
+          <span class="mobile-nav-label">Products</span>
+        </button>
+
+        <!-- Center Elevated Action: POS Sale -->
+        <button class="mobile-nav-item mobile-nav-pos-center" id="mobNavPos" data-view="pos" onclick="navigate('pos')" aria-label="POS Sale">
+          <div class="mobile-nav-pos-circle">
+            <span class="mobile-nav-pos-icon">🛒</span>
+          </div>
+          <span class="mobile-nav-label">POS</span>
+        </button>
+
+        <!-- Tab 4: Invoices -->
+        <button class="mobile-nav-item" id="mobNavInvoices" data-view="invoices" onclick="navigate('invoices')" aria-label="Invoices">
+          <span class="mobile-nav-icon">🧾</span>
+          <span class="mobile-nav-label">Invoices</span>
+        </button>
+
+        <!-- Tab 5: More (Opens full menu drawer) -->
+        <button class="mobile-nav-item" id="mobNavMenu" onclick="toggleSidebar(true)" aria-label="More Menu">
+          <span class="mobile-nav-icon">☰</span>
+          <span class="mobile-nav-label">More</span>
+        </button>
+      </nav>
 
     </div>
   </div>
@@ -2616,6 +3035,7 @@
        ========================================================================== */
     const State = {
       activeView: 'dashboard',
+      productLayout: localStorage.getItem('imp_product_layout') || 'grid',
       dashboardDateRange: '30D',
       revenueProfits: {
         dateRange: '30D',
@@ -2738,32 +3158,61 @@
       ];
 
       // 5. 25 Products
+      // Default Curated High-Definition Product Photos
+      const DEFAULT_PRODUCT_IMAGES = {
+        'PRD-0001': 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80',
+        'PRD-0002': 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=600&q=80',
+        'PRD-0003': 'https://images.unsplash.com/photo-1580481077195-c3f25c796537?auto=format&fit=crop&w=600&q=80',
+        'PRD-0004': 'https://images.unsplash.com/photo-1595515106969-1ce29566ff1c?auto=format&fit=crop&w=600&q=80',
+        'PRD-0005': 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80',
+        'PRD-0006': 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=600&q=80',
+        'PRD-0007': 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=600&q=80',
+        'PRD-0008': 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=600&q=80',
+        'PRD-0009': 'https://images.unsplash.com/photo-1629429408209-1f912961dbd8?auto=format&fit=crop&w=600&q=80',
+        'PRD-0010': 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=600&q=80',
+        'PRD-0011': 'https://images.unsplash.com/photo-1607344645866-009c320c5ab8?auto=format&fit=crop&w=600&q=80',
+        'PRD-0012': 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=600&q=80',
+        'PRD-0013': 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80',
+        'PRD-0014': 'https://images.unsplash.com/photo-1544652478-6653e09f18a2?auto=format&fit=crop&w=600&q=80',
+        'PRD-0015': 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=600&q=80',
+        'PRD-0016': 'https://images.unsplash.com/photo-1585336261024-6497f6c382bf?auto=format&fit=crop&w=600&q=80',
+        'PRD-0017': 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=600&q=80',
+        'PRD-0018': 'https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=600&q=80',
+        'PRD-0019': 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=600&q=80',
+        'PRD-0020': 'https://images.unsplash.com/photo-1589578527966-fdac0f44566c?auto=format&fit=crop&w=600&q=80',
+        'PRD-0021': 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=600&q=80',
+        'PRD-0022': 'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&w=600&q=80',
+        'PRD-0023': 'https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?auto=format&fit=crop&w=600&q=80',
+        'PRD-0024': 'https://images.unsplash.com/photo-1563770660941-20978e870e26?auto=format&fit=crop&w=600&q=80',
+        'PRD-0025': 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?auto=format&fit=crop&w=600&q=80'
+      };
+
       const rawProducts = [
-        { id: 'PRD-0001', name: 'Aero Pro Laptop 15"', sku: 'LAP-0982', barcode: '8901234001', category: 'Electronics & Computers', brand: 'AeroTech', unit: 'Box', cost: 650.00, price: 899.00, stock: 38, minStock: 10, reorderLevel: 15, supplier: 'Silicon Valley Wholesale Inc.', emoji: '💻' },
-        { id: 'PRD-0002', name: 'Ultra-Slim Monitor 27" 4K', sku: 'MON-2704', barcode: '8901234002', category: 'Electronics & Computers', brand: 'AeroTech', unit: 'Box', cost: 180.00, price: 299.00, stock: 24, minStock: 8, reorderLevel: 10, supplier: 'Silicon Valley Wholesale Inc.', emoji: '🖥️' },
-        { id: 'PRD-0003', name: 'Ergonomic Mesh Chair Pro', sku: 'CHR-8812', barcode: '8901234003', category: 'Office Furniture', brand: 'ProWork', unit: 'Piece', cost: 120.00, price: 249.00, stock: 18, minStock: 6, reorderLevel: 8, supplier: 'Global Ergonomics Co.', emoji: '🪑' },
-        { id: 'PRD-0004', name: 'Motorized Standing Desk 60"', sku: 'DSK-6010', barcode: '8901234004', category: 'Office Furniture', brand: 'ProWork', unit: 'Piece', cost: 220.00, price: 449.00, stock: 12, minStock: 5, reorderLevel: 6, supplier: 'Global Ergonomics Co.', emoji: '🛋️' },
-        { id: 'PRD-0005', name: 'Wireless ANC Headphones', sku: 'AUD-4410', barcode: '8901234005', category: 'Audio & Acoustics', brand: 'SoundPure', unit: 'Piece', cost: 85.00, price: 159.00, stock: 45, minStock: 12, reorderLevel: 15, supplier: 'Sonic Distributors Ltd', emoji: '🎧' },
-        { id: 'PRD-0006', name: 'Studio USB-C Microphone', sku: 'MIC-3020', barcode: '8901234006', category: 'Audio & Acoustics', brand: 'SoundPure', unit: 'Piece', cost: 45.00, price: 99.00, stock: 30, minStock: 8, reorderLevel: 10, supplier: 'Sonic Distributors Ltd', emoji: '🎙️' },
-        { id: 'PRD-0007', name: 'Mechanical RGB Keyboard', sku: 'MKR-0004', barcode: '8901234007', category: 'Accessories & Peripherals', brand: 'NexusKey', unit: 'Box', cost: 42.00, price: 79.00, stock: 4, minStock: 10, reorderLevel: 12, supplier: 'Matrix Component Supply', emoji: '⌨️' }, // Low stock
-        { id: 'PRD-0008', name: 'Ergonomic Vertical Mouse', sku: 'WEM-0001', barcode: '8901234008', category: 'Accessories & Peripherals', brand: 'NexusKey', unit: 'Piece', cost: 16.00, price: 39.00, stock: 0, minStock: 10, reorderLevel: 15, supplier: 'Matrix Component Supply', emoji: '🖱️' }, // Out of stock
-        { id: 'PRD-0009', name: 'Thunderbolt 4 Dual Dock', sku: 'DCK-9001', barcode: '8901234009', category: 'Accessories & Peripherals', brand: 'AeroTech', unit: 'Piece', cost: 95.00, price: 179.00, stock: 2, minStock: 8, reorderLevel: 10, supplier: 'Silicon Valley Wholesale Inc.', emoji: '🔌' }, // Low stock
-        { id: 'PRD-0010', name: 'Heavy Duty Shipping Box L', sku: 'BOX-0100', barcode: '8901234010', category: 'Packaging Supplies', brand: 'OmniPack', unit: 'Pack', cost: 18.00, price: 34.00, stock: 85, minStock: 20, reorderLevel: 30, supplier: 'Pacific Freight & Packaging', emoji: '📦' },
-        { id: 'PRD-0011', name: 'Reinforced Bubble Roll 100m', sku: 'BBL-0101', barcode: '8901234011', category: 'Packaging Supplies', brand: 'OmniPack', unit: 'Pack', cost: 12.00, price: 24.00, stock: 40, minStock: 15, reorderLevel: 20, supplier: 'Pacific Freight & Packaging', emoji: '🫧' },
-        { id: 'PRD-0012', name: 'Wi-Fi 6 Mesh Router System', sku: 'NET-6001', barcode: '8901234012', category: 'Networking & Servers', brand: 'AeroTech', unit: 'Box', cost: 110.00, price: 219.00, stock: 19, minStock: 5, reorderLevel: 8, supplier: 'Matrix Component Supply', emoji: '📶' },
-        { id: 'PRD-0013', name: '16-Port Gigabit Switch', sku: 'NET-1601', barcode: '8901234013', category: 'Networking & Servers', brand: 'AeroTech', unit: 'Piece', cost: 55.00, price: 109.00, stock: 22, minStock: 6, reorderLevel: 8, supplier: 'Matrix Component Supply', emoji: '🎛️' },
-        { id: 'PRD-0014', name: 'Cat6 Shielded Cable 50m', sku: 'CBL-0050', barcode: '8901234014', category: 'Networking & Servers', brand: 'AeroTech', unit: 'Meter', cost: 14.00, price: 29.00, stock: 60, minStock: 15, reorderLevel: 20, supplier: 'Matrix Component Supply', emoji: '🧵' },
-        { id: 'PRD-0015', name: '4K Ultra Webcam HDR', sku: 'CAM-4001', barcode: '8901234015', category: 'Electronics & Computers', brand: 'AeroTech', unit: 'Piece', cost: 48.00, price: 89.00, stock: 3, minStock: 10, reorderLevel: 12, supplier: 'Silicon Valley Wholesale Inc.', emoji: '📷' }, // Low stock
-        { id: 'PRD-0016', name: 'Leather Executive Desk Pad', sku: 'PAD-0012', barcode: '8901234016', category: 'Office Furniture', brand: 'ProWork', unit: 'Piece', cost: 15.00, price: 34.00, stock: 45, minStock: 10, reorderLevel: 15, supplier: 'Global Ergonomics Co.', emoji: '📐' },
-        { id: 'PRD-0017', name: 'Mobile Filing Cabinet 3-Drawer', sku: 'CAB-0033', barcode: '8901234017', category: 'Office Furniture', brand: 'ProWork', unit: 'Piece', cost: 65.00, price: 139.00, stock: 14, minStock: 4, reorderLevel: 6, supplier: 'Global Ergonomics Co.', emoji: '🗄️' },
-        { id: 'PRD-0018', name: 'Conference Soundbar Speaker', sku: 'AUD-8800', barcode: '8901234018', category: 'Audio & Acoustics', brand: 'SoundPure', unit: 'Piece', cost: 75.00, price: 149.00, stock: 0, minStock: 6, reorderLevel: 8, supplier: 'Sonic Distributors Ltd', emoji: '🔊' }, // Out of stock
-        { id: 'PRD-0019', name: 'Wireless Bluetooth Lavalier Mic', sku: 'MIC-1002', barcode: '8901234019', category: 'Audio & Acoustics', brand: 'SoundPure', unit: 'Box', cost: 38.00, price: 79.00, stock: 26, minStock: 8, reorderLevel: 10, supplier: 'Sonic Distributors Ltd', emoji: '🎙️' },
-        { id: 'PRD-0020', name: 'Numeric Wireless Keypad', sku: 'NUM-0011', barcode: '8901234020', category: 'Accessories & Peripherals', brand: 'NexusKey', unit: 'Piece', cost: 12.00, price: 28.00, stock: 50, minStock: 12, reorderLevel: 15, supplier: 'Matrix Component Supply', emoji: '🔢' },
-        { id: 'PRD-0021', name: 'USB-C Fast Charging Cable 2m', sku: 'CBL-0020', barcode: '8901234021', category: 'Accessories & Peripherals', brand: 'NexusKey', unit: 'Piece', cost: 4.50, price: 14.00, stock: 120, minStock: 30, reorderLevel: 40, supplier: 'Matrix Component Supply', emoji: '⚡' },
-        { id: 'PRD-0022', name: 'Kraft Packaging Tape 6-Pack', sku: 'TAP-0006', barcode: '8901234022', category: 'Packaging Supplies', brand: 'OmniPack', unit: 'Pack', cost: 9.00, price: 19.00, stock: 75, minStock: 20, reorderLevel: 25, supplier: 'Pacific Freight & Packaging', emoji: '🏷️' },
-        { id: 'PRD-0023', name: 'Waterproof Shipping Polymailers', sku: 'PLY-0500', barcode: '8901234023', category: 'Packaging Supplies', brand: 'OmniPack', unit: 'Pack', cost: 14.00, price: 29.00, stock: 95, minStock: 25, reorderLevel: 30, supplier: 'Pacific Freight & Packaging', emoji: '✉️' },
-        { id: 'PRD-0024', name: 'Rackmount Power Strip 8-Outlet', sku: 'PWR-0008', barcode: '8901234024', category: 'Networking & Servers', brand: 'AeroTech', unit: 'Piece', cost: 22.00, price: 49.00, stock: 28, minStock: 8, reorderLevel: 10, supplier: 'Silicon Valley Wholesale Inc.', emoji: '🔌' },
-        { id: 'PRD-0025', name: 'Portable External SSD 1TB', sku: 'SSD-1000', barcode: '8901234025', category: 'Electronics & Computers', brand: 'AeroTech', unit: 'Piece', cost: 58.00, price: 119.00, stock: 35, minStock: 10, reorderLevel: 12, supplier: 'Silicon Valley Wholesale Inc.', emoji: '💾' }
+        { id: 'PRD-0001', name: 'Aero Pro Laptop 15"', sku: 'LAP-0982', barcode: '8901234001', category: 'Electronics & Computers', brand: 'AeroTech', unit: 'Box', cost: 650.00, price: 899.00, stock: 38, minStock: 10, reorderLevel: 15, supplier: 'Silicon Valley Wholesale Inc.', emoji: '💻', image: DEFAULT_PRODUCT_IMAGES['PRD-0001'] },
+        { id: 'PRD-0002', name: 'Ultra-Slim Monitor 27" 4K', sku: 'MON-2704', barcode: '8901234002', category: 'Electronics & Computers', brand: 'AeroTech', unit: 'Box', cost: 180.00, price: 299.00, stock: 24, minStock: 8, reorderLevel: 10, supplier: 'Silicon Valley Wholesale Inc.', emoji: '🖥️', image: DEFAULT_PRODUCT_IMAGES['PRD-0002'] },
+        { id: 'PRD-0003', name: 'Ergonomic Mesh Chair Pro', sku: 'CHR-8812', barcode: '8901234003', category: 'Office Furniture', brand: 'ProWork', unit: 'Piece', cost: 120.00, price: 249.00, stock: 18, minStock: 6, reorderLevel: 8, supplier: 'Global Ergonomics Co.', emoji: '🪑', image: DEFAULT_PRODUCT_IMAGES['PRD-0003'] },
+        { id: 'PRD-0004', name: 'Motorized Standing Desk 60"', sku: 'DSK-6010', barcode: '8901234004', category: 'Office Furniture', brand: 'ProWork', unit: 'Piece', cost: 220.00, price: 449.00, stock: 12, minStock: 5, reorderLevel: 6, supplier: 'Global Ergonomics Co.', emoji: '🛋️', image: DEFAULT_PRODUCT_IMAGES['PRD-0004'] },
+        { id: 'PRD-0005', name: 'Wireless ANC Headphones', sku: 'AUD-4410', barcode: '8901234005', category: 'Audio & Acoustics', brand: 'SoundPure', unit: 'Piece', cost: 85.00, price: 159.00, stock: 45, minStock: 12, reorderLevel: 15, supplier: 'Sonic Distributors Ltd', emoji: '🎧', image: DEFAULT_PRODUCT_IMAGES['PRD-0005'] },
+        { id: 'PRD-0006', name: 'Studio USB-C Microphone', sku: 'MIC-3020', barcode: '8901234006', category: 'Audio & Acoustics', brand: 'SoundPure', unit: 'Piece', cost: 45.00, price: 99.00, stock: 30, minStock: 8, reorderLevel: 10, supplier: 'Sonic Distributors Ltd', emoji: '🎙️', image: DEFAULT_PRODUCT_IMAGES['PRD-0006'] },
+        { id: 'PRD-0007', name: 'Mechanical RGB Keyboard', sku: 'MKR-0004', barcode: '8901234007', category: 'Accessories & Peripherals', brand: 'NexusKey', unit: 'Box', cost: 42.00, price: 79.00, stock: 4, minStock: 10, reorderLevel: 12, supplier: 'Matrix Component Supply', emoji: '⌨️', image: DEFAULT_PRODUCT_IMAGES['PRD-0007'] },
+        { id: 'PRD-0008', name: 'Ergonomic Vertical Mouse', sku: 'WEM-0001', barcode: '8901234008', category: 'Accessories & Peripherals', brand: 'NexusKey', unit: 'Piece', cost: 16.00, price: 39.00, stock: 0, minStock: 10, reorderLevel: 15, supplier: 'Matrix Component Supply', emoji: '🖱️', image: DEFAULT_PRODUCT_IMAGES['PRD-0008'] },
+        { id: 'PRD-0009', name: 'Thunderbolt 4 Dual Dock', sku: 'DCK-9001', barcode: '8901234009', category: 'Accessories & Peripherals', brand: 'AeroTech', unit: 'Piece', cost: 95.00, price: 179.00, stock: 2, minStock: 8, reorderLevel: 10, supplier: 'Silicon Valley Wholesale Inc.', emoji: '🔌', image: DEFAULT_PRODUCT_IMAGES['PRD-0009'] },
+        { id: 'PRD-0010', name: 'Heavy Duty Shipping Box L', sku: 'BOX-0100', barcode: '8901234010', category: 'Packaging Supplies', brand: 'OmniPack', unit: 'Pack', cost: 18.00, price: 34.00, stock: 85, minStock: 20, reorderLevel: 30, supplier: 'Pacific Freight & Packaging', emoji: '📦', image: DEFAULT_PRODUCT_IMAGES['PRD-0010'] },
+        { id: 'PRD-0011', name: 'Reinforced Bubble Roll 100m', sku: 'BBL-0101', barcode: '8901234011', category: 'Packaging Supplies', brand: 'OmniPack', unit: 'Pack', cost: 12.00, price: 24.00, stock: 40, minStock: 15, reorderLevel: 20, supplier: 'Pacific Freight & Packaging', emoji: '🫧', image: DEFAULT_PRODUCT_IMAGES['PRD-0011'] },
+        { id: 'PRD-0012', name: 'Wi-Fi 6 Mesh Router System', sku: 'NET-6001', barcode: '8901234012', category: 'Networking & Servers', brand: 'AeroTech', unit: 'Box', cost: 110.00, price: 219.00, stock: 19, minStock: 5, reorderLevel: 8, supplier: 'Matrix Component Supply', emoji: '📶', image: DEFAULT_PRODUCT_IMAGES['PRD-0012'] },
+        { id: 'PRD-0013', name: '16-Port Gigabit Switch', sku: 'NET-1601', barcode: '8901234013', category: 'Networking & Servers', brand: 'AeroTech', unit: 'Piece', cost: 55.00, price: 109.00, stock: 22, minStock: 6, reorderLevel: 8, supplier: 'Matrix Component Supply', emoji: '🎛️', image: DEFAULT_PRODUCT_IMAGES['PRD-0013'] },
+        { id: 'PRD-0014', name: 'Cat6 Shielded Cable 50m', sku: 'CBL-0050', barcode: '8901234014', category: 'Networking & Servers', brand: 'AeroTech', unit: 'Meter', cost: 14.00, price: 29.00, stock: 60, minStock: 15, reorderLevel: 20, supplier: 'Matrix Component Supply', emoji: '🧵', image: DEFAULT_PRODUCT_IMAGES['PRD-0014'] },
+        { id: 'PRD-0015', name: '4K Ultra Webcam HDR', sku: 'CAM-4001', barcode: '8901234015', category: 'Electronics & Computers', brand: 'AeroTech', unit: 'Piece', cost: 48.00, price: 89.00, stock: 3, minStock: 10, reorderLevel: 12, supplier: 'Silicon Valley Wholesale Inc.', emoji: '📷', image: DEFAULT_PRODUCT_IMAGES['PRD-0015'] },
+        { id: 'PRD-0016', name: 'Leather Executive Desk Pad', sku: 'PAD-0012', barcode: '8901234016', category: 'Office Furniture', brand: 'ProWork', unit: 'Piece', cost: 15.00, price: 34.00, stock: 45, minStock: 10, reorderLevel: 15, supplier: 'Global Ergonomics Co.', emoji: '📐', image: DEFAULT_PRODUCT_IMAGES['PRD-0016'] },
+        { id: 'PRD-0017', name: 'Mobile Filing Cabinet 3-Drawer', sku: 'CAB-0033', barcode: '8901234017', category: 'Office Furniture', brand: 'ProWork', unit: 'Piece', cost: 65.00, price: 139.00, stock: 14, minStock: 4, reorderLevel: 6, supplier: 'Global Ergonomics Co.', emoji: '🗄️', image: DEFAULT_PRODUCT_IMAGES['PRD-0017'] },
+        { id: 'PRD-0018', name: 'Conference Soundbar Speaker', sku: 'AUD-8800', barcode: '8901234018', category: 'Audio & Acoustics', brand: 'SoundPure', unit: 'Piece', cost: 75.00, price: 149.00, stock: 0, minStock: 6, reorderLevel: 8, supplier: 'Sonic Distributors Ltd', emoji: '🔊', image: DEFAULT_PRODUCT_IMAGES['PRD-0018'] },
+        { id: 'PRD-0019', name: 'Wireless Bluetooth Lavalier Mic', sku: 'MIC-1002', barcode: '8901234019', category: 'Audio & Acoustics', brand: 'SoundPure', unit: 'Box', cost: 38.00, price: 79.00, stock: 26, minStock: 8, reorderLevel: 10, supplier: 'Sonic Distributors Ltd', emoji: '🎙️', image: DEFAULT_PRODUCT_IMAGES['PRD-0019'] },
+        { id: 'PRD-0020', name: 'Numeric Wireless Keypad', sku: 'NUM-0011', barcode: '8901234020', category: 'Accessories & Peripherals', brand: 'NexusKey', unit: 'Piece', cost: 12.00, price: 28.00, stock: 50, minStock: 12, reorderLevel: 15, supplier: 'Matrix Component Supply', emoji: '🔢', image: DEFAULT_PRODUCT_IMAGES['PRD-0020'] },
+        { id: 'PRD-0021', name: 'USB-C Fast Charging Cable 2m', sku: 'CBL-0020', barcode: '8901234021', category: 'Accessories & Peripherals', brand: 'NexusKey', unit: 'Piece', cost: 4.50, price: 14.00, stock: 120, minStock: 30, reorderLevel: 40, supplier: 'Matrix Component Supply', emoji: '⚡', image: DEFAULT_PRODUCT_IMAGES['PRD-0021'] },
+        { id: 'PRD-0022', name: 'Kraft Packaging Tape 6-Pack', sku: 'TAP-0006', barcode: '8901234022', category: 'Packaging Supplies', brand: 'OmniPack', unit: 'Pack', cost: 9.00, price: 19.00, stock: 75, minStock: 20, reorderLevel: 25, supplier: 'Pacific Freight & Packaging', emoji: '🏷️', image: DEFAULT_PRODUCT_IMAGES['PRD-0022'] },
+        { id: 'PRD-0023', name: 'Waterproof Shipping Polymailers', sku: 'PLY-0500', barcode: '8901234023', category: 'Packaging Supplies', brand: 'OmniPack', unit: 'Pack', cost: 14.00, price: 29.00, stock: 95, minStock: 25, reorderLevel: 30, supplier: 'Pacific Freight & Packaging', emoji: '✉️', image: DEFAULT_PRODUCT_IMAGES['PRD-0023'] },
+        { id: 'PRD-0024', name: 'Rackmount Power Strip 8-Outlet', sku: 'PWR-0008', barcode: '8901234024', category: 'Networking & Servers', brand: 'AeroTech', unit: 'Piece', cost: 22.00, price: 49.00, stock: 28, minStock: 8, reorderLevel: 10, supplier: 'Silicon Valley Wholesale Inc.', emoji: '🔌', image: DEFAULT_PRODUCT_IMAGES['PRD-0024'] },
+        { id: 'PRD-0025', name: 'Portable External SSD 1TB', sku: 'SSD-1000', barcode: '8901234025', category: 'Electronics & Computers', brand: 'AeroTech', unit: 'Piece', cost: 58.00, price: 119.00, stock: 35, minStock: 10, reorderLevel: 12, supplier: 'Silicon Valley Wholesale Inc.', emoji: '💾', image: DEFAULT_PRODUCT_IMAGES['PRD-0025'] }
       ];
 
       // Save categories, brands, suppliers, customers, products
@@ -2972,6 +3421,41 @@
       syncSettingsToUI();
 
       State.products = await dbGetAll('products');
+
+      // Ensure existing demo products in IndexedDB have images
+      const fallbackDemoImages = {
+        'PRD-0001': 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80',
+        'PRD-0002': 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=600&q=80',
+        'PRD-0003': 'https://images.unsplash.com/photo-1580481077195-c3f25c796537?auto=format&fit=crop&w=600&q=80',
+        'PRD-0004': 'https://images.unsplash.com/photo-1595515106969-1ce29566ff1c?auto=format&fit=crop&w=600&q=80',
+        'PRD-0005': 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80',
+        'PRD-0006': 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=600&q=80',
+        'PRD-0007': 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=600&q=80',
+        'PRD-0008': 'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=600&q=80',
+        'PRD-0009': 'https://images.unsplash.com/photo-1629429408209-1f912961dbd8?auto=format&fit=crop&w=600&q=80',
+        'PRD-0010': 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=600&q=80',
+        'PRD-0011': 'https://images.unsplash.com/photo-1607344645866-009c320c5ab8?auto=format&fit=crop&w=600&q=80',
+        'PRD-0012': 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=600&q=80',
+        'PRD-0013': 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80',
+        'PRD-0014': 'https://images.unsplash.com/photo-1544652478-6653e09f18a2?auto=format&fit=crop&w=600&q=80',
+        'PRD-0015': 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=600&q=80',
+        'PRD-0016': 'https://images.unsplash.com/photo-1585336261024-6497f6c382bf?auto=format&fit=crop&w=600&q=80',
+        'PRD-0017': 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=600&q=80',
+        'PRD-0018': 'https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=600&q=80',
+        'PRD-0019': 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=600&q=80',
+        'PRD-0020': 'https://images.unsplash.com/photo-1589578527966-fdac0f44566c?auto=format&fit=crop&w=600&q=80',
+        'PRD-0021': 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=600&q=80',
+        'PRD-0022': 'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&w=600&q=80',
+        'PRD-0023': 'https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?auto=format&fit=crop&w=600&q=80',
+        'PRD-0024': 'https://images.unsplash.com/photo-1563770660941-20978e870e26?auto=format&fit=crop&w=600&q=80',
+        'PRD-0025': 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?auto=format&fit=crop&w=600&q=80'
+      };
+      for (const p of State.products) {
+        if (!p.image && fallbackDemoImages[p.id]) {
+          p.image = fallbackDemoImages[p.id];
+          await dbPut('products', p);
+        }
+      }
       State.categories = await dbGetAll('categories');
       State.brands = await dbGetAll('brands');
       State.stockMovements = await dbGetAll('stock_movements');
@@ -3031,16 +3515,36 @@
         }
       });
 
-      // Close mobile sidebar
-      document.getElementById('sidebar').classList.remove('open');
+      // Update mobile bottom nav items
+      document.querySelectorAll('.mobile-nav-item').forEach(item => {
+        item.classList.remove('active');
+        const targetView = item.dataset.view;
+        if (targetView && (targetView === viewName || (targetView === 'invoices' && viewName === 'sales_history'))) {
+          item.classList.add('active');
+        }
+      });
+
+      // Close mobile sidebar and backdrop
+      toggleSidebar(false);
 
       // Render view
       renderCurrentView();
       window.scrollTo(0, 0);
     }
 
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('open');
+    function toggleSidebar(forceState) {
+      const sidebar = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      if (!sidebar) return;
+
+      const isOpen = typeof forceState === 'boolean' 
+        ? forceState 
+        : !sidebar.classList.contains('open');
+
+      sidebar.classList.toggle('open', isOpen);
+      if (backdrop) {
+        backdrop.classList.toggle('active', isOpen);
+      }
     }
 
     async function toggleDarkMode() {
@@ -3752,10 +4256,10 @@
       `;
     }
 
-    /* 7.2 Products View */
+    /* 7.2 Products View & Multi-Layout Presentation */
     function renderProductsView() {
       const prods = getSortedProducts();
-      const f = calculateFinancials();
+      const layout = State.productLayout || 'grid';
 
       return `
         <div class="view-header-strip">
@@ -3770,35 +4274,235 @@
           </div>
         </div>
 
-        <!-- Filter bar -->
-        <div class="card" style="padding:14px 20px;">
+        <!-- Filter & Layout Switcher bar -->
+        <div class="card" style="padding:14px 20px; margin-bottom:18px;">
           <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
-            <div style="display:flex; gap:10px; flex:1; min-width:260px; max-width:400px;">
+            <div style="display:flex; gap:10px; flex:1; min-width:260px; max-width:380px;">
               <input type="text" id="prodTableSearch" class="form-input" placeholder="Search by name, SKU, or barcode..." oninput="filterProductsTable()">
             </div>
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
-              <select id="prodCategoryFilter" class="form-select" onchange="filterProductsTable()" style="width:160px;">
+            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+              <select id="prodCategoryFilter" class="form-select" onchange="filterProductsTable()" style="width:150px;">
                 <option value="">All Categories</option>
                 ${State.categories.map(c => `<option value="${c.name}">${c.name}</option>`).join('')}
               </select>
-              <select id="prodStockFilter" class="form-select" onchange="filterProductsTable()" style="width:150px;">
+              <select id="prodStockFilter" class="form-select" onchange="filterProductsTable()" style="width:140px;">
                 <option value="">All Stock States</option>
                 <option value="in_stock">In Stock</option>
                 <option value="low_stock">Low Stock</option>
                 <option value="out_of_stock">Out of Stock</option>
               </select>
-              <select id="prodSortFilter" class="form-select" onchange="filterProductsTable()" style="width:160px;">
+              <select id="prodSortFilter" class="form-select" onchange="filterProductsTable()" style="width:150px;">
                 <option value="newest">Sort: Latest Added</option>
                 <option value="price_desc">Price: High to Low</option>
                 <option value="price_asc">Price: Low to High</option>
                 <option value="stock_asc">Stock: Low to High</option>
                 <option value="name_asc">Name: A to Z</option>
               </select>
+
+              <!-- Layout Switcher Group -->
+              <div class="layout-toggle-group" title="Switch product display layout">
+                <button class="layout-toggle-btn ${layout === 'grid' ? 'active' : ''}" id="btnLayoutGrid" onclick="setProductLayout('grid')" aria-label="Grid Layout">
+                  <span>⊞</span>
+                  <span>Grid</span>
+                </button>
+                <button class="layout-toggle-btn ${layout === 'table' ? 'active' : ''}" id="btnLayoutTable" onclick="setProductLayout('table')" aria-label="Table Layout">
+                  <span>☰</span>
+                  <span>Table</span>
+                </button>
+                <button class="layout-toggle-btn ${layout === 'compact' ? 'active' : ''}" id="btnLayoutCompact" onclick="setProductLayout('compact')" aria-label="Compact Layout">
+                  <span>▦</span>
+                  <span>Compact</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Products Table -->
+        <!-- Dynamic Layout Container -->
+        <div id="productsDisplayContainer">
+          ${renderActiveProductLayout(prods)}
+        </div>
+      `;
+    }
+
+    function renderActiveProductLayout(prods) {
+      const layout = State.productLayout || 'grid';
+      if (layout === 'grid') {
+        return renderProductsGridView(prods);
+      } else if (layout === 'compact') {
+        return renderProductsCompactView(prods);
+      } else {
+        return renderProductsTableView(prods);
+      }
+    }
+
+    function setProductLayout(layoutName) {
+      State.productLayout = layoutName;
+      try {
+        localStorage.setItem('imp_product_layout', layoutName);
+      } catch(e) {}
+
+      document.querySelectorAll('.layout-toggle-btn').forEach(btn => btn.classList.remove('active'));
+      if (layoutName === 'grid') document.getElementById('btnLayoutGrid')?.classList.add('active');
+      if (layoutName === 'table') document.getElementById('btnLayoutTable')?.classList.add('active');
+      if (layoutName === 'compact') document.getElementById('btnLayoutCompact')?.classList.add('active');
+
+      filterProductsTable();
+    }
+
+    function renderProductsGridView(prods) {
+      if (prods.length === 0) {
+        return `
+          <div class="card">
+            <div class="empty-state">
+              <div class="empty-state-icon">📦</div>
+              <h4>No Products Found</h4>
+              <p>Try adjusting your search query or filters.</p>
+              <button class="btn btn-primary btn-sm" onclick="openAddProductModal()">Add Product</button>
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="products-grid-container">
+          ${prods.map(p => {
+            let statusBadge = `<span class="badge badge-in-stock">🟢 In Stock</span>`;
+            let barColor = 'var(--success)';
+            let fillPct = Math.min(100, Math.round((p.stock / (p.reorderLevel * 2 || 20)) * 100));
+
+            if (p.stock <= 0) {
+              statusBadge = `<span class="badge badge-out-of-stock">🔴 Out of Stock</span>`;
+              barColor = 'var(--danger)';
+              fillPct = 0;
+            } else if (p.stock <= p.reorderLevel) {
+              statusBadge = `<span class="badge badge-low-stock">🟡 Low Stock</span>`;
+              barColor = 'var(--warning)';
+            }
+
+            const profit = (p.price || 0) - (p.cost || 0);
+            const marginPct = p.price > 0 ? Math.round((profit / p.price) * 100) : 0;
+            const marginBadge = marginPct >= 0 
+              ? `<span class="product-card-margin" title="Profit margin: ${formatMoney(profit)} (${marginPct}%)">+${marginPct}%</span>`
+              : `<span class="product-card-margin" style="background:var(--danger-light); color:var(--danger); border-color:rgba(239,68,68,0.25);">${marginPct}%</span>`;
+
+            const imgHtml = p.image
+              ? `<img src="${p.image}" class="product-card-img" alt="${p.name}" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'product-card-img-fallback\\'>${p.emoji || '📦'}</div>';">`
+              : `<div class="product-card-img-fallback">${p.emoji || '📦'}</div>`;
+
+            return `
+              <div class="product-card" id="prodCard-${p.id}">
+                <div class="product-card-img-wrap">
+                  <div class="product-card-badge-left">
+                    <span class="badge badge-info">${p.category || 'General'}</span>
+                  </div>
+                  <div class="product-card-badge-right">
+                    ${statusBadge}
+                  </div>
+                  ${imgHtml}
+                </div>
+
+                <div class="product-card-body">
+                  <div class="product-card-meta">
+                    <span class="product-card-sku">SKU: ${p.sku}</span>
+                    <span class="product-card-unit">${p.unit || 'Piece'}</span>
+                  </div>
+
+                  <h3 class="product-card-title" title="${p.name}">${p.name}</h3>
+
+                  <div class="product-card-price-row">
+                    <div>
+                      <div class="product-card-price">${formatMoney(p.price)}</div>
+                      <div class="product-card-cost">Cost: ${formatMoney(p.cost)}</div>
+                    </div>
+                    ${marginBadge}
+                  </div>
+
+                  <div class="product-card-stock-info">
+                    <div class="product-card-stock-row">
+                      <span>Stock Quantity:</span>
+                      <span class="product-card-stock-val">${p.stock} units</span>
+                    </div>
+                    <div class="meter-bar" style="height:6px;">
+                      <div class="meter-fill" style="width:${fillPct}%; background:${barColor};"></div>
+                    </div>
+                    <div class="product-card-stock-row" style="font-size:10.5px; color:var(--text-muted); margin-top:2px;">
+                      <span>Valuation:</span>
+                      <span style="font-weight:600; color:var(--text-primary);">${formatMoney(p.stock * p.cost)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="product-card-footer">
+                  <button class="btn btn-secondary btn-sm" onclick="addToCart('${p.id}'); showToast('Added ${p.name.replace(/'/g, "\\'")} to sale cart', 'success');" title="Quick Add to POS Sale">
+                    <span>🛒</span> Sale
+                  </button>
+                  <div class="product-card-actions">
+                    <button class="btn btn-secondary btn-sm" title="Edit Product" onclick="openEditProductModal('${p.id}')">✏️</button>
+                    <button class="btn btn-secondary btn-sm" title="Adjust Stock" onclick="openStockAdjustModal('${p.id}')">⚡</button>
+                    <button class="btn btn-secondary btn-sm" title="Delete Product" style="color:var(--danger);" onclick="deleteProduct('${p.id}')">🗑️</button>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    function renderProductsCompactView(prods) {
+      if (prods.length === 0) {
+        return `
+          <div class="card">
+            <div class="empty-state">
+              <div class="empty-state-icon">📦</div>
+              <h4>No Products Found</h4>
+              <p>Try adjusting your search query or filters.</p>
+              <button class="btn btn-primary btn-sm" onclick="openAddProductModal()">Add Product</button>
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="products-compact-grid">
+          ${prods.map(p => {
+            let statusBadge = p.stock <= 0 
+              ? `<span class="badge badge-out-of-stock" style="font-size:9.5px; padding:2px 6px;">Out</span>`
+              : p.stock <= p.reorderLevel 
+                ? `<span class="badge badge-low-stock" style="font-size:9.5px; padding:2px 6px;">Low (${p.stock})</span>`
+                : `<span class="badge badge-in-stock" style="font-size:9.5px; padding:2px 6px;">${p.stock} pcs</span>`;
+
+            const imgHtml = p.image
+              ? `<img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='${p.emoji || '📦'}';">`
+              : `${p.emoji || '📦'}`;
+
+            return `
+              <div class="product-compact-card">
+                <div class="product-compact-thumb">
+                  ${imgHtml}
+                </div>
+                <div>
+                  <div style="font-size:10px; font-family:'JetBrains Mono'; color:var(--text-muted);">${p.sku}</div>
+                  <div class="product-compact-title" title="${p.name}">${p.name}</div>
+                </div>
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-top:auto;">
+                  <span class="product-compact-price">${formatMoney(p.price)}</span>
+                  ${statusBadge}
+                </div>
+                <div style="display:flex; gap:4px; margin-top:4px;">
+                  <button class="btn btn-secondary btn-sm" style="flex:1; padding:4px 6px; font-size:11px;" onclick="openEditProductModal('${p.id}')">✏️ Edit</button>
+                  <button class="btn btn-secondary btn-sm" style="padding:4px 8px;" title="Stock Adjust" onclick="openStockAdjustModal('${p.id}')">⚡</button>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    function renderProductsTableView(prods) {
+      return `
         <div class="card no-pad">
           <div class="table-responsive">
             <table class="data-table" id="productsMasterTable">
@@ -3841,11 +4545,15 @@
           barColor = 'var(--warning)';
         }
 
+        const avatarImg = p.image 
+          ? `<img src="${p.image}" alt="${p.name}" onerror="this.onerror=null; this.parentElement.innerHTML='${p.emoji || '📦'}';">` 
+          : (p.emoji || '📦');
+
         return `
           <tr>
             <td>
               <div class="prod-info-cell">
-                <div class="prod-avatar">${p.emoji || '📦'}</div>
+                <div class="prod-avatar">${avatarImg}</div>
                 <div>
                   <div class="prod-title">${p.name}</div>
                   <div class="prod-sub">SKU: ${p.sku} • Unit: ${p.unit || 'Piece'}</div>
@@ -3901,8 +4609,93 @@
         filtered.sort((a, b) => a.name.localeCompare(b.name));
       }
 
-      const tbody = document.querySelector('#productsMasterTable tbody');
-      if (tbody) tbody.innerHTML = renderProductsTableRows(filtered);
+      const container = document.getElementById('productsDisplayContainer');
+      if (container) {
+        container.innerHTML = renderActiveProductLayout(filtered);
+      } else {
+        const tbody = document.querySelector('#productsMasterTable tbody');
+        if (tbody) tbody.innerHTML = renderProductsTableRows(filtered);
+      }
+    }
+
+    /* Product Image Upload & Compression Handlers */
+    function handleProductImageUpload(inputEl, previewBoxId, hiddenInputId) {
+      const file = inputEl.files && inputEl.files[0];
+      if (!file) return;
+
+      if (!file.type.startsWith('image/')) {
+        showToast('Please select a valid image file (PNG, JPG, WebP)', 'error');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          const maxDim = 600;
+
+          if (width > height && width > maxDim) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else if (height > maxDim) {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+          const hiddenInput = document.getElementById(hiddenInputId);
+          if (hiddenInput) hiddenInput.value = dataUrl;
+
+          const previewBox = document.getElementById(previewBoxId);
+          if (previewBox) {
+            previewBox.innerHTML = `<img src="${dataUrl}" class="product-image-preview-img" alt="Product Preview">`;
+          }
+          showToast('Image uploaded and optimized!', 'success');
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handleProductImageUrlInput(url, previewBoxId, hiddenInputId) {
+      const cleanUrl = url.trim();
+      const hiddenInput = document.getElementById(hiddenInputId);
+      if (hiddenInput) hiddenInput.value = cleanUrl;
+
+      const previewBox = document.getElementById(previewBoxId);
+      if (previewBox) {
+        if (cleanUrl) {
+          previewBox.innerHTML = `<img src="${cleanUrl}" class="product-image-preview-img" alt="Product Preview" onerror="this.onerror=null; this.parentElement.innerHTML='<span style=\\'font-size:32px;\\'>⚠️</span>';">`;
+        } else {
+          previewBox.innerHTML = `<span style="font-size:32px; color:var(--text-muted);">📷</span>`;
+        }
+      }
+    }
+
+    function removeProductImage(previewBoxId, hiddenInputId, fileInputId, urlInputId) {
+      const hiddenInput = document.getElementById(hiddenInputId);
+      if (hiddenInput) hiddenInput.value = '';
+
+      const fileInput = document.getElementById(fileInputId);
+      if (fileInput) fileInput.value = '';
+
+      const urlInput = document.getElementById(urlInputId);
+      if (urlInput) urlInput.value = '';
+
+      const previewBox = document.getElementById(previewBoxId);
+      if (previewBox) {
+        previewBox.innerHTML = `<span style="font-size:32px; color:var(--text-muted);">📷</span>`;
+      }
+      showToast('Image removed');
     }
 
     /* 7.3 POS Terminal / New Sale View */
@@ -3966,17 +4759,23 @@
       if (prods.length === 0) {
         return `<div class="empty-state" style="grid-column: 1/-1;">No products found matching query.</div>`;
       }
-      return prods.map(p => `
-        <div class="pos-item-card" onclick="addToCart('${p.id}')">
-          <div class="pos-item-header">
-            <span style="font-size:24px;">${p.emoji || '📦'}</span>
-            <span class="badge ${p.stock <= 0 ? 'badge-out-of-stock' : p.stock <= p.reorderLevel ? 'badge-low-stock' : 'badge-in-stock'}">${p.stock} in stock</span>
+      return prods.map(p => {
+        const thumbHtml = p.image 
+          ? `<div class="pos-item-thumb"><img src="${p.image}" class="pos-item-img" alt="${p.name}" onerror="this.onerror=null; this.parentElement.innerHTML='<span style=\\'font-size:24px;\\'>${p.emoji || '📦'}</span>';"></div>`
+          : `<div style="font-size:24px; margin-bottom:6px;">${p.emoji || '📦'}</div>`;
+
+        return `
+          <div class="pos-item-card" onclick="addToCart('${p.id}')">
+            <div class="pos-item-header">
+              <span class="badge ${p.stock <= 0 ? 'badge-out-of-stock' : p.stock <= p.reorderLevel ? 'badge-low-stock' : 'badge-in-stock'}">${p.stock} in stock</span>
+            </div>
+            ${thumbHtml}
+            <div class="pos-item-name">${p.name}</div>
+            <div style="font-size:11px; color:var(--text-muted); font-family:'JetBrains Mono';">${p.sku}</div>
+            <div class="pos-item-price">${formatMoney(p.price)}</div>
           </div>
-          <div class="pos-item-name">${p.name}</div>
-          <div style="font-size:11px; color:var(--text-muted); font-family:'JetBrains Mono';">${p.sku}</div>
-          <div class="pos-item-price">${formatMoney(p.price)}</div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function filterPOSProducts() {
@@ -7905,6 +8704,31 @@
         </div>
         <form onsubmit="event.preventDefault(); saveProductForm();">
           <div class="modal-body">
+            
+            <!-- Product Photo / Image Dropzone & Upload -->
+            <div class="form-group" style="margin-bottom:16px;">
+              <label class="form-label" style="display:flex; justify-content:space-between; align-items:center;">
+                <span>Product Photo / Image</span>
+                <span style="font-size:11px; color:var(--text-muted); font-weight:normal;">Upload image file or paste web URL</span>
+              </label>
+              <div class="product-image-preview-container">
+                <div class="product-image-preview-box" id="addProdImagePreviewBox">
+                  <span style="font-size:32px; color:var(--text-muted);">📷</span>
+                </div>
+                <div class="product-image-actions">
+                  <div style="display:flex; gap:8px; align-items:center;">
+                    <label class="btn btn-secondary btn-sm" style="cursor:pointer; margin:0;">
+                      <span>📁 Choose Image File</span>
+                      <input type="file" id="mProdImageFile" accept="image/*" style="display:none;" onchange="handleProductImageUpload(this, 'addProdImagePreviewBox', 'mProdImage')">
+                    </label>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="removeProductImage('addProdImagePreviewBox', 'mProdImage', 'mProdImageFile', 'mProdImageUrlInput')">Remove</button>
+                  </div>
+                  <input type="text" id="mProdImageUrlInput" class="form-input" placeholder="Or paste image URL (e.g. https://...)" oninput="handleProductImageUrlInput(this.value, 'addProdImagePreviewBox', 'mProdImage')">
+                  <input type="hidden" id="mProdImage" value="">
+                </div>
+              </div>
+            </div>
+
             <div class="form-grid-2">
               <div class="form-group">
                 <label class="form-label">Product Name *</label>
@@ -7965,10 +8789,12 @@
       const price = Number(document.getElementById('mProdPrice').value);
       const stock = Number(document.getElementById('mProdStock').value);
       const reorderLevel = Number(document.getElementById('mProdReorder').value);
+      const image = document.getElementById('mProdImage')?.value || '';
 
       const newProd = {
         id: `PRD-${String(State.products.length + 1).padStart(4, '0')}`,
         name, sku, category, unit, cost, price, stock, reorderLevel,
+        image,
         emoji: '📦',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
@@ -9233,6 +10059,33 @@
         </div>
         <form onsubmit="event.preventDefault(); saveEditProductForm('${prod.id}');">
           <div class="modal-body">
+            
+            <!-- Product Photo / Image Section -->
+            <div class="form-group" style="margin-bottom:16px;">
+              <label class="form-label" style="display:flex; justify-content:space-between; align-items:center;">
+                <span>Product Photo / Image</span>
+                <span style="font-size:11px; color:var(--text-muted); font-weight:normal;">Change image file or update URL</span>
+              </label>
+              <div class="product-image-preview-container">
+                <div class="product-image-preview-box" id="editProdImagePreviewBox">
+                  ${prod.image 
+                    ? `<img src="${prod.image}" class="product-image-preview-img" alt="${prod.name}">` 
+                    : `<span style="font-size:32px; color:var(--text-muted);">${prod.emoji || '📷'}</span>`}
+                </div>
+                <div class="product-image-actions">
+                  <div style="display:flex; gap:8px; align-items:center;">
+                    <label class="btn btn-secondary btn-sm" style="cursor:pointer; margin:0;">
+                      <span>📁 Change Image File</span>
+                      <input type="file" id="mEditProdImageFile" accept="image/*" style="display:none;" onchange="handleProductImageUpload(this, 'editProdImagePreviewBox', 'mEditProdImage')">
+                    </label>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="removeProductImage('editProdImagePreviewBox', 'mEditProdImage', 'mEditProdImageFile', 'mEditProdImageUrlInput')">Remove</button>
+                  </div>
+                  <input type="text" id="mEditProdImageUrlInput" class="form-input" placeholder="Or paste image URL (e.g. https://...)" value="${(prod.image && !prod.image.startsWith('data:')) ? prod.image : ''}" oninput="handleProductImageUrlInput(this.value, 'editProdImagePreviewBox', 'mEditProdImage')">
+                  <input type="hidden" id="mEditProdImage" value="${prod.image || ''}">
+                </div>
+              </div>
+            </div>
+
             <div class="form-grid-2">
               <div class="form-group">
                 <label class="form-label">Product Name *</label>
@@ -9294,6 +10147,7 @@
       prod.unit = document.getElementById('mEditProdUnit')?.value || prod.unit;
       prod.cost = Number(document.getElementById('mEditProdCost')?.value || 0);
       prod.price = Number(document.getElementById('mEditProdPrice')?.value || 0);
+      prod.image = document.getElementById('mEditProdImage')?.value || prod.image || '';
       const newStock = Number(document.getElementById('mEditProdStock')?.value || 0);
       const stockDiff = newStock - prod.stock;
       prod.stock = newStock;
