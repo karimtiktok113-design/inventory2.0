@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inventory Management Pro — Small Business Suite</title>
+  <title>Invently — Smart Inventory & POS Suite</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="alternate icon" type="image/jpeg" href="invently-logo.jpg">
+  <link rel="apple-touch-icon" href="invently-logo.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -139,39 +142,93 @@
     }
 
     .sidebar-brand {
-      padding: 22px 20px;
+      padding: 18px 18px;
       display: flex;
       align-items: center;
       gap: 12px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s ease;
+    }
+    .sidebar-brand:hover {
+      background: rgba(255, 255, 255, 0.03);
     }
 
     .brand-icon {
-      width: 38px;
-      height: 38px;
-      background: linear-gradient(135deg, var(--primary), var(--purple));
-      color: white;
-      font-weight: 800;
-      font-size: 18px;
-      border-radius: 10px;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 14px var(--primary-glow);
+      position: relative;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, #0284c7 0%, #4f46e5 50%, #9333ea 100%);
+      box-shadow: 0 4px 18px rgba(79, 70, 229, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .brand-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .brand-titles {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .brand-titles .brand-name-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 1px;
     }
 
     .brand-titles h1 {
-      font-size: 15.5px;
-      font-weight: 700;
+      font-size: 17.5px;
+      font-weight: 800;
       color: #ffffff;
-      line-height: 1.2;
-      letter-spacing: -0.01em;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .brand-titles .brand-dot {
+      color: #38bdf8;
+      font-size: 19px;
+      font-weight: 900;
+      line-height: 0;
+    }
+
+    .brand-titles .brand-badge {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: rgba(56, 189, 248, 0.16);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      margin-left: 6px;
     }
 
     .brand-titles p {
       font-size: 11px;
       color: #94a3b8;
       font-weight: 500;
+      margin: 3px 0 0 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 160px;
     }
 
     .sidebar-menu {
@@ -3523,11 +3580,16 @@
          SIDEBAR NAVIGATION
          ========================================================================== -->
     <aside class="sidebar" id="sidebar">
-      <div class="sidebar-brand">
-        <div class="brand-icon">IMP</div>
+      <div class="sidebar-brand" onclick="navigate('dashboard')" title="Invently — Smart Inventory & POS Suite">
+        <div class="brand-icon">
+          <img src="invently-logo.jpg" alt="Invently Logo" onerror="this.onerror=null; this.src='favicon.svg';">
+        </div>
         <div class="brand-titles">
-          <h1 id="sidebarBizName">Inventory Pro</h1>
-          <p>Small Business Suite</p>
+          <div class="brand-name-wrap">
+            <h1>Invently</h1><span class="brand-dot">.</span>
+            <span class="brand-badge">SaaS</span>
+          </div>
+          <p id="sidebarBizName">Smart Inventory & POS</p>
         </div>
       </div>
 
@@ -3650,6 +3712,10 @@
         <button class="nav-btn" onclick="navigate('settings_business')">
           <span class="icon">⚙️</span>
           <span>Business Settings</span>
+        </button>
+        <button class="nav-btn" onclick="navigate('settings_tax_discount')">
+          <span class="icon">🏷️</span>
+          <span>Tax & Discounts</span>
         </button>
         <button class="nav-btn" onclick="navigate('settings_invoice')">
           <span class="icon">🧾</span>
@@ -3970,7 +4036,15 @@
         email: 'sales@apexretail.com',
         website: 'https://apexretail.example.com',
         taxId: 'TAX-893201-US',
+        taxEnabled: true,
+        taxName: 'Sales Tax',
         defaultTax: 8.5,
+        taxType: 'exclusive',
+        discountEnabled: true,
+        defaultDiscount: 0,
+        discountType: 'percent',
+        discountPresets: [5, 10, 15, 20],
+        maxDiscount: 50,
         defaultPaymentMethod: 'Cash',
         invoicePrefix: 'INV-',
         invoicePadding: 4,
@@ -3985,6 +4059,7 @@
         darkMode: false
       },
       cart: [],
+      posDiscount: { type: 'percent', value: 0 },
       selectedCustomer: null
     };
 
@@ -4376,8 +4451,9 @@
     function syncSettingsToUI() {
       // 1. Sidebar Brand Name & Browser Tab Title
       const bizNameEl = document.getElementById('sidebarBizName');
-      if (bizNameEl) bizNameEl.innerText = State.settings.businessName || 'Inventory Pro';
-      document.title = `${State.settings.businessName || 'Inventory Pro'} — Small Business Suite`;
+      const currentBiz = State.settings.businessName || 'Smart Inventory & POS';
+      if (bizNameEl) bizNameEl.innerText = currentBiz;
+      document.title = `${currentBiz ? currentBiz + ' • ' : ''}Invently — Smart Inventory & POS Suite`;
 
       // 2. Active Visual Theme Palette
       document.body.className = document.body.className
@@ -4559,8 +4635,74 @@
       const bounds = getDateRangeBounds(range, customStart, customEnd);
       if (!bounds.isBounded) return true;
       const t = d.getTime();
-      return t >= bounds.start.getTime() && t <= bounds.end.getTime();
     }
+
+    /* ==========================================================================
+       CANONICAL ORDER TOTALS, TAX & DISCOUNT ENGINE
+       Unified financial calculation for POS Cart, Checkout, Invoices & Settings
+       ========================================================================== */
+    function computeOrderTotals(subtotal, discountInput, taxInput) {
+      const s = State.settings || {};
+      const sub = Math.max(0, Number(subtotal) || 0);
+
+      // 1. Discount computation
+      let discType = (discountInput && discountInput.type) || s.discountType || 'percent';
+      let discVal = Number((discountInput && discountInput.value !== undefined) ? discountInput.value : (s.defaultDiscount || 0));
+      if (isNaN(discVal) || discVal < 0) discVal = 0;
+
+      // Enforce max discount safeguard if enabled
+      const maxDisc = Number(s.maxDiscount ?? 100);
+      if (discType === 'percent' && maxDisc > 0 && discVal > maxDisc) {
+        discVal = maxDisc;
+      }
+
+      let discountAmount = 0;
+      if (s.discountEnabled !== false && discVal > 0) {
+        if (discType === 'percent') {
+          discountAmount = Math.round(sub * (discVal / 100) * 100) / 100;
+        } else {
+          discountAmount = Math.min(sub, Math.round(discVal * 100) / 100);
+        }
+      }
+
+      const discountedSubtotal = Math.max(0, sub - discountAmount);
+
+      // 2. Tax computation
+      const taxEnabled = (taxInput && taxInput.enabled !== undefined) ? taxInput.enabled : (s.taxEnabled !== false);
+      const taxRate = Number((taxInput && taxInput.rate !== undefined) ? taxInput.rate : (s.defaultTax ?? 8.5));
+      const taxName = (taxInput && taxInput.name) || s.taxName || 'Sales Tax';
+      const taxMode = (taxInput && taxInput.type) || s.taxType || 'exclusive';
+
+      let taxAmount = 0;
+      let grandTotal = discountedSubtotal;
+
+      if (taxEnabled && taxRate > 0) {
+        if (taxMode === 'inclusive') {
+          // Tax is included in product prices: Tax = Subtotal - (Subtotal / (1 + r))
+          taxAmount = Math.round((discountedSubtotal - (discountedSubtotal / (1 + (taxRate / 100)))) * 100) / 100;
+          grandTotal = discountedSubtotal;
+        } else {
+          // Exclusive: Tax is added on top: Tax = Subtotal * (r / 100)
+          taxAmount = Math.round(discountedSubtotal * (taxRate / 100) * 100) / 100;
+          grandTotal = Math.round((discountedSubtotal + taxAmount) * 100) / 100;
+        }
+      }
+
+      return {
+        subtotal: sub,
+        discount: discountAmount,
+        discountVal: discVal,
+        discountType: discType,
+        discountedSubtotal,
+        tax: taxAmount,
+        taxRate,
+        taxName,
+        taxMode,
+        taxEnabled,
+        grandTotal
+      };
+    }
+    window.computeOrderTotals = computeOrderTotals;
 
     /* Primary Unified Financial Calculation Engine (Synchronized across the entire application) */
     function calculateFinancials(dateRange = (State.dashboardDateRange || '30D'), customStart, customEnd, filters = {}) {
@@ -4773,6 +4915,7 @@
           container.innerHTML = renderBackupRestoreView();
           break;
         case 'settings_business':
+        case 'settings_tax_discount':
         case 'settings_invoice':
         case 'settings_appearance':
           container.innerHTML = renderSettingsView(view);
@@ -6444,28 +6587,85 @@
 
     function renderPOSCartTotals() {
       const subtotal = State.cart.reduce((sum, i) => sum + i.total, 0);
-      const taxRate = State.settings.defaultTax || 8.5;
-      const tax = Math.round(subtotal * (taxRate / 100) * 100) / 100;
-      const grandTotal = subtotal + tax;
+      const s = State.settings || {};
+      if (!State.posDiscount) {
+        State.posDiscount = { type: s.discountType || 'percent', value: s.defaultDiscount || 0 };
+      }
+      const totals = computeOrderTotals(subtotal, State.posDiscount);
+
+      const presets = (s.discountPresets && s.discountPresets.length > 0) ? s.discountPresets : [5, 10, 15, 20];
+      const activeDiscVal = Number(State.posDiscount.value || 0);
+      const activeDiscType = State.posDiscount.type || 'percent';
 
       return `
+        <!-- Quick Discount Presets Toolbar if discounts enabled in Settings -->
+        ${s.discountEnabled !== false ? `
+          <div style="background:var(--item-bg); border:1px solid var(--border-color); border-radius:8px; padding:7px 10px; margin-bottom:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+              <span style="font-size:11px; font-weight:700; color:var(--text-primary); display:flex; align-items:center; gap:4px;">
+                <span>🏷️</span> Order Discount:
+              </span>
+              <span style="font-size:11px; font-weight:700; color:${totals.discount > 0 ? 'var(--success)' : 'var(--text-muted)'}; font-family:'JetBrains Mono';">
+                ${totals.discount > 0 ? `-${formatMoney(totals.discount)} (${totals.discountVal}${totals.discountType === 'percent' ? '%' : ''})` : '0% (None)'}
+              </span>
+            </div>
+            <div style="display:flex; gap:4px; flex-wrap:wrap; align-items:center;">
+              <button class="pill-btn ${activeDiscVal === 0 ? 'active' : ''}" style="padding:2px 8px; font-size:11px; border:1px solid var(--border-color);" onclick="setPOSCartDiscount(0)">0%</button>
+              ${presets.map(p => `
+                <button class="pill-btn ${(activeDiscVal === p && activeDiscType === 'percent') ? 'active' : ''}" style="padding:2px 8px; font-size:11px; border:1px solid var(--border-color);" onclick="setPOSCartDiscount(${p})">${p}%</button>
+              `).join('')}
+              <button class="btn btn-secondary btn-sm" style="padding:2px 7px; font-size:10.5px; height:22px; line-height:1;" onclick="promptPOSCustomDiscount()" title="Enter custom discount percentage or amount">Custom...</button>
+            </div>
+          </div>
+        ` : ''}
+
         <div class="totals-line">
           <span>Subtotal</span>
           <span>${formatMoney(subtotal)}</span>
         </div>
-        <div class="totals-line">
-          <span>Estimated Tax (${taxRate}%)</span>
-          <span>${formatMoney(tax)}</span>
-        </div>
+
+        ${(s.discountEnabled !== false && totals.discount > 0) ? `
+          <div class="totals-line" style="color:var(--success); font-weight:600;">
+            <span>Discount (${totals.discountVal}${totals.discountType === 'percent' ? '%' : ''})</span>
+            <span style="font-family:'JetBrains Mono';">-${formatMoney(totals.discount)}</span>
+          </div>
+        ` : ''}
+
+        ${s.taxEnabled !== false ? `
+          <div class="totals-line">
+            <span>${totals.taxName} (${totals.taxRate}%${totals.taxMode === 'inclusive' ? ' incl.' : ''})</span>
+            <span style="font-family:'JetBrains Mono';">${formatMoney(totals.tax)}</span>
+          </div>
+        ` : ''}
+
         <div class="totals-line grand">
           <span>Grand Total</span>
-          <span style="color:var(--primary);">${formatMoney(grandTotal)}</span>
+          <span style="color:var(--primary); font-family:'JetBrains Mono'; font-weight:800;">${formatMoney(totals.grandTotal)}</span>
         </div>
-        <button class="btn btn-primary" style="width:100%; justify-content:center; padding:12px; font-size:14px; margin-top:8px;" onclick="openCheckoutModal()" ${State.cart.length === 0 ? 'disabled' : ''}>
-          <span>⚡ Complete Sale & Pay</span>
+        <button class="btn btn-primary" style="width:100%; justify-content:center; padding:12px; font-size:14px; margin-top:8px; font-weight:700;" onclick="openCheckoutModal()" ${State.cart.length === 0 ? 'disabled' : ''}>
+          <span>⚡ Complete Sale & Pay (${formatMoney(totals.grandTotal)})</span>
         </button>
       `;
     }
+
+    function setPOSCartDiscount(val, type = 'percent') {
+      State.posDiscount = { type, value: Math.max(0, Number(val) || 0) };
+      const totalsArea = document.getElementById('posCartTotalsArea');
+      if (totalsArea) totalsArea.innerHTML = renderPOSCartTotals();
+    }
+    window.setPOSCartDiscount = setPOSCartDiscount;
+
+    function promptPOSCustomDiscount() {
+      const cur = State.posDiscount?.value || 0;
+      const maxD = State.settings?.maxDiscount ?? 50;
+      const input = prompt(`Enter custom discount percentage (0 to ${maxD}%):`, cur);
+      if (input !== null && input.trim() !== '') {
+        const val = Math.max(0, Math.min(maxD, Number(input) || 0));
+        setPOSCartDiscount(val, 'percent');
+        showToast(`Discount of ${val}% applied to cart`, 'info');
+      }
+    }
+    window.promptPOSCustomDiscount = promptPOSCustomDiscount;
 
     function updatePOSCustomer(customerId) {
       State.selectedCustomer = State.customers.find(c => c.id === customerId) || null;
@@ -7422,7 +7622,7 @@
       </div>
     </div>
 
-    <div class="generated-note">Generated by ${bizName} Inventory Management System &nbsp;|&nbsp; ${today}</div>
+    <div class="generated-note">Generated by ${bizName} &nbsp;|&nbsp; Invently Cloud Suite &nbsp;|&nbsp; ${today}</div>
   </div>
 
   ${autoPrint ? `\x3Cscript\x3E
@@ -9512,6 +9712,133 @@
             </div>
           </div>
         `;
+      } else if (activeTab === 'settings_tax_discount') {
+        contentHtml = `
+          <form id="taxDiscountSettingsForm" onsubmit="event.preventDefault(); saveTaxDiscountSettingsForm();">
+            
+            <!-- 1. TAX CONFIGURATION CARD -->
+            <div style="background:var(--item-bg); border:1px solid var(--border-color); border-radius:10px; padding:18px; margin-bottom:20px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid var(--border-color); padding-bottom:10px; flex-wrap:wrap; gap:10px;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="font-size:18px;">🏛️</span>
+                  <div>
+                    <h4 style="margin:0; font-size:14px; font-weight:700;">Tax Engine & Policy</h4>
+                    <span style="font-size:11.5px; color:var(--text-muted);">Manage sales tax, VAT, GST and how charges are applied to sales</span>
+                  </div>
+                </div>
+                <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:13px; font-weight:700; color:var(--primary);">
+                  <input type="checkbox" id="setTaxEnabled" ${s.taxEnabled !== false ? 'checked' : ''} onchange="updateSettingsTaxPreview()">
+                  <span>Tax Calculation Enabled</span>
+                </label>
+              </div>
+
+              <div class="form-grid-2" style="gap:14px;">
+                <div class="form-group">
+                  <label class="form-label">Tax System Label / Name *</label>
+                  <input type="text" id="setTaxName" class="form-input" value="${s.taxName || 'Sales Tax'}" placeholder="e.g. Sales Tax, VAT, GST, HST" required oninput="updateSettingsTaxPreview()">
+                  <span style="font-size:11px; color:var(--text-muted);">Appears on POS checkout, A4 invoices, and receipts</span>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Default Tax Rate (%) *</label>
+                  <input type="number" step="0.01" min="0" max="100" id="setDefaultTaxRate" class="form-input" value="${s.defaultTax ?? 8.5}" required oninput="updateSettingsTaxPreview()">
+                  <span style="font-size:11px; color:var(--text-muted);">Standard rate applied to sales (e.g. 8.5%, 15%, 18%)</span>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Tax Calculation Mode</label>
+                  <select id="setTaxType" class="form-select" onchange="updateSettingsTaxPreview()">
+                    <option value="exclusive" ${s.taxType !== 'inclusive' ? 'selected' : ''}>Exclusive (Added to Subtotal: Subtotal + Tax)</option>
+                    <option value="inclusive" ${s.taxType === 'inclusive' ? 'selected' : ''}>Inclusive (Price already includes Tax)</option>
+                  </select>
+                  <span style="font-size:11px; color:var(--text-muted);">Inclusive automatically extracts tax from gross price</span>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Tax Registration / NTN / VAT Number</label>
+                  <input type="text" id="setTaxRegId" class="form-input" value="${s.taxId || ''}" placeholder="e.g. TAX-893201-US or 1234567-8" oninput="updateSettingsTaxPreview()">
+                  <span style="font-size:11px; color:var(--text-muted);">Official tax registry identifier printed on receipts</span>
+                </div>
+
+                <div class="form-group" style="grid-column:1/-1;">
+                  <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
+                    <input type="checkbox" id="setShowTax" ${s.showTax !== false ? 'checked' : ''}>
+                    <span>Display Tax breakdown line item on Invoices & Receipts</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. DISCOUNT CONFIGURATION CARD -->
+            <div style="background:var(--item-bg); border:1px solid var(--border-color); border-radius:10px; padding:18px; margin-bottom:20px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid var(--border-color); padding-bottom:10px; flex-wrap:wrap; gap:10px;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="font-size:18px;">🏷️</span>
+                  <div>
+                    <h4 style="margin:0; font-size:14px; font-weight:700;">Discounts & Promotions Policy</h4>
+                    <span style="font-size:11.5px; color:var(--text-muted);">Order-level discounts, quick preset buttons, and safeguards</span>
+                  </div>
+                </div>
+                <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:13px; font-weight:700; color:var(--success);">
+                  <input type="checkbox" id="setDiscountEnabled" ${s.discountEnabled !== false ? 'checked' : ''} onchange="updateSettingsTaxPreview()">
+                  <span>Discounts Enabled</span>
+                </label>
+              </div>
+
+              <div class="form-grid-2" style="gap:14px;">
+                <div class="form-group">
+                  <label class="form-label">Default Order Discount</label>
+                  <div style="display:flex; gap:8px;">
+                    <input type="number" step="0.5" min="0" id="setDefaultDiscount" class="form-input" style="flex:1;" value="${s.defaultDiscount || 0}" oninput="updateSettingsTaxPreview()">
+                    <select id="setDiscountType" class="form-select" style="width:110px;" onchange="updateSettingsTaxPreview()">
+                      <option value="percent" ${s.discountType !== 'fixed' ? 'selected' : ''}>% Percent</option>
+                      <option value="fixed" ${s.discountType === 'fixed' ? 'selected' : ''}>$ Fixed</option>
+                    </select>
+                  </div>
+                  <span style="font-size:11px; color:var(--text-muted);">Initial discount auto-selected for new checkouts</span>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Quick Discount Preset Buttons (%)</label>
+                  <input type="text" id="setDiscountPresets" class="form-input" value="${(s.discountPresets || [5, 10, 15, 20]).join(', ')}" placeholder="e.g. 5, 10, 15, 20" oninput="updateSettingsTaxPreview()">
+                  <span style="font-size:11px; color:var(--text-muted);">Comma-separated percentages shown as 1-click pills in POS</span>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Maximum Allowed Discount (%)</label>
+                  <input type="number" min="1" max="100" id="setMaxDiscount" class="form-input" value="${s.maxDiscount ?? 50}" oninput="updateSettingsTaxPreview()">
+                  <span style="font-size:11px; color:var(--text-muted);">Cashier safeguard against accidental excessive discounting</span>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Display Preference</label>
+                  <div style="margin-top:8px;">
+                    <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer;">
+                      <input type="checkbox" id="setShowDiscount" ${s.showDiscount !== false ? 'checked' : ''}>
+                      <span>Display Discount savings line on Invoices & Receipts</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. INTERACTIVE LIVE CALCULATION SIMULATOR -->
+            <div style="background:var(--card-bg, #ffffff); border:2px dashed var(--primary); border-radius:10px; padding:18px; margin-bottom:20px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+                <div style="font-size:13px; font-weight:700; color:var(--primary); display:flex; align-items:center; gap:6px;">
+                  <span>⚡</span> Real-time Calculation Preview (Sample Order $100.00)
+                </div>
+                <span style="font-size:11px; color:var(--text-muted);">Simulates exact arithmetic applied to POS & Invoices</span>
+              </div>
+              <div id="settingsTaxPreviewBox" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px; text-align:center;">
+                <!-- Populated dynamically by updateSettingsTaxPreview() -->
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="font-weight:700; padding:10px 20px;">💾 Save Tax & Discount Settings</button>
+          </form>
+        `;
+        setTimeout(updateSettingsTaxPreview, 50);
       } else if (activeTab === 'settings_invoice') {
         contentHtml = `
           <form id="invoiceSettingsForm" onsubmit="event.preventDefault(); saveInvoiceSettingsForm();">
@@ -9643,7 +9970,7 @@
         <div class="view-header-strip">
           <div class="page-title">
             <h2>Application Settings</h2>
-            <p>Configure business profile, currency, invoice customization & color themes</p>
+            <p>Configure business profile, currency, tax rates, discount policy, invoice customization & color themes</p>
           </div>
           <div class="action-button-row">
             ${activeTab === 'settings_appearance' ? '' : `<button class="btn btn-primary btn-sm" onclick="triggerActiveSettingsSave('${activeTab}')">💾 Save Changes</button>`}
@@ -9655,6 +9982,7 @@
           <!-- Tab selector -->
           <div class="filter-pills" style="margin-bottom:24px;">
             <button class="pill-btn ${activeTab === 'settings_business' ? 'active' : ''}" onclick="navigate('settings_business')">🏢 Business Profile</button>
+            <button class="pill-btn ${activeTab === 'settings_tax_discount' ? 'active' : ''}" onclick="navigate('settings_tax_discount')">🏷️ Tax & Discounts</button>
             <button class="pill-btn ${activeTab === 'settings_invoice' ? 'active' : ''}" onclick="navigate('settings_invoice')">🧾 Invoice Settings</button>
             <button class="pill-btn ${activeTab === 'settings_appearance' ? 'active' : ''}" onclick="navigate('settings_appearance')">🎨 Appearance & Themes</button>
           </div>
@@ -9686,9 +10014,111 @@
     function triggerActiveSettingsSave(tab) {
       if (tab === 'settings_invoice') {
         saveInvoiceSettingsForm();
+      } else if (tab === 'settings_tax_discount') {
+        saveTaxDiscountSettingsForm();
       } else {
         saveBusinessSettingsForm();
       }
+    }
+
+    function updateSettingsTaxPreview() {
+      const box = document.getElementById('settingsTaxPreviewBox');
+      if (!box) return;
+
+      const taxEnabled = !!document.getElementById('setTaxEnabled')?.checked;
+      const taxName = document.getElementById('setTaxName')?.value.trim() || 'Sales Tax';
+      const taxRate = Number(document.getElementById('setDefaultTaxRate')?.value ?? document.getElementById('setDefaultTax')?.value ?? 8.5);
+      const taxMode = document.getElementById('setTaxType')?.value || 'exclusive';
+
+      const discountEnabled = !!document.getElementById('setDiscountEnabled')?.checked;
+      const discVal = Number(document.getElementById('setDefaultDiscount')?.value || 0);
+      const discType = document.getElementById('setDiscountType')?.value || 'percent';
+
+      const sampleSubtotal = 100;
+      let sampleDiscount = 0;
+      if (discountEnabled && discVal > 0) {
+        sampleDiscount = discType === 'percent' ? Math.round(sampleSubtotal * (discVal / 100) * 100) / 100 : Math.min(sampleSubtotal, discVal);
+      }
+      const discountedSubtotal = Math.max(0, sampleSubtotal - sampleDiscount);
+
+      let sampleTax = 0;
+      let sampleTotal = discountedSubtotal;
+      if (taxEnabled && taxRate > 0) {
+        if (taxMode === 'inclusive') {
+          sampleTax = Math.round((discountedSubtotal - (discountedSubtotal / (1 + (taxRate / 100)))) * 100) / 100;
+          sampleTotal = discountedSubtotal;
+        } else {
+          sampleTax = Math.round(discountedSubtotal * (taxRate / 100) * 100) / 100;
+          sampleTotal = Math.round((discountedSubtotal + sampleTax) * 100) / 100;
+        }
+      }
+
+      box.innerHTML = `
+        <div style="background:var(--item-bg); padding:8px 10px; border-radius:6px; border:1px solid var(--border-color);">
+          <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase;">Subtotal</div>
+          <div style="font-size:14px; font-weight:700; font-family:'JetBrains Mono';">${formatMoney(sampleSubtotal)}</div>
+        </div>
+        <div style="background:var(--item-bg); padding:8px 10px; border-radius:6px; border:1px solid var(--border-color);">
+          <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase;">Discount ${discVal > 0 ? `(${discVal}${discType === 'percent' ? '%' : ''})` : ''}</div>
+          <div style="font-size:14px; font-weight:700; color:#16a34a; font-family:'JetBrains Mono';">-${formatMoney(sampleDiscount)}</div>
+        </div>
+        <div style="background:var(--item-bg); padding:8px 10px; border-radius:6px; border:1px solid var(--border-color);">
+          <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase;">${taxName} (${taxRate}%)</div>
+          <div style="font-size:14px; font-weight:700; color:#2563eb; font-family:'JetBrains Mono';">${taxEnabled ? '+' + formatMoney(sampleTax) : 'Disabled (0)'}</div>
+        </div>
+        <div style="background:var(--item-bg); padding:8px 10px; border-radius:6px; border:1px solid var(--border-color);">
+          <div style="font-size:10px; color:var(--text-muted); text-transform:uppercase;">Mode</div>
+          <div style="font-size:12px; font-weight:700; color:var(--text-primary); text-transform:capitalize;">${taxMode}</div>
+        </div>
+        <div style="background:var(--primary); color:white; padding:8px 10px; border-radius:6px; grid-column:1/-1;">
+          <div style="font-size:10px; opacity:0.85; text-transform:uppercase;">Sample Final Grand Total</div>
+          <div style="font-size:18px; font-weight:800; font-family:'JetBrains Mono';">${formatMoney(sampleTotal)}</div>
+        </div>
+      `;
+    }
+    window.updateSettingsTaxPreview = updateSettingsTaxPreview;
+
+    async function saveTaxDiscountSettingsForm() {
+      const taxEnabled = !!document.getElementById('setTaxEnabled')?.checked;
+      const taxName = document.getElementById('setTaxName')?.value.trim() || 'Sales Tax';
+      const defaultTax = Math.max(0, Number(document.getElementById('setDefaultTaxRate')?.value || 0));
+      const taxType = document.getElementById('setTaxType')?.value || 'exclusive';
+      const taxId = document.getElementById('setTaxRegId')?.value.trim() || State.settings.taxId || '';
+      const showTax = !!document.getElementById('setShowTax')?.checked;
+
+      const discountEnabled = !!document.getElementById('setDiscountEnabled')?.checked;
+      const defaultDiscount = Math.max(0, Number(document.getElementById('setDefaultDiscount')?.value || 0));
+      const discountType = document.getElementById('setDiscountType')?.value || 'percent';
+      const rawPresets = document.getElementById('setDiscountPresets')?.value || '5, 10, 15, 20';
+      const discountPresets = rawPresets.split(',').map(x => Number(x.trim())).filter(x => !isNaN(x) && x >= 0);
+      const maxDiscount = Math.min(100, Math.max(0, Number(document.getElementById('setMaxDiscount')?.value || 50)));
+      const showDiscount = !!document.getElementById('setShowDiscount')?.checked;
+
+      const updated = {
+        ...State.settings,
+        taxEnabled,
+        taxName,
+        defaultTax,
+        taxType,
+        taxId,
+        showTax,
+        discountEnabled,
+        defaultDiscount,
+        discountType,
+        discountPresets: discountPresets.length > 0 ? discountPresets : [5, 10, 15, 20],
+        maxDiscount,
+        showDiscount,
+        id: 'app_settings'
+      };
+
+      State.settings = updated;
+      try {
+        localStorage.setItem('imp_settings', JSON.stringify(updated));
+      } catch(e) {}
+      await dbPut('settings', updated);
+      syncSettingsToUI();
+      showToast('Tax & Discount settings saved and synchronized across application!', 'success');
+      renderCurrentView();
     }
 
     async function saveBusinessSettingsForm() {
@@ -11066,9 +11496,12 @@
     /* POS Checkout Modal */
     function openCheckoutModal() {
       const subtotal = State.cart.reduce((sum, i) => sum + i.total, 0);
-      const taxRate = State.settings.defaultTax || 8.5;
-      const tax = Math.round(subtotal * (taxRate / 100) * 100) / 100;
-      const grandTotal = subtotal + tax;
+      const s = State.settings || {};
+      if (!State.posDiscount) {
+        State.posDiscount = { type: s.discountType || 'percent', value: s.defaultDiscount || 0 };
+      }
+      const totals = computeOrderTotals(subtotal, State.posDiscount);
+      const presets = (s.discountPresets && s.discountPresets.length > 0) ? s.discountPresets : [5, 10, 15, 20];
 
       // Determine initial customer selection
       const activeCust = State.selectedCustomer || null;
@@ -11082,7 +11515,7 @@
             <span style="font-size:20px;">⚡</span>
             <div>
               <h3 style="margin:0; font-size:16px;">Complete Sale & Checkout</h3>
-              <p style="margin:0; font-size:11px; color:var(--text-muted);">${State.cart.length} item(s) • CRM Customer Sync Enabled</p>
+              <p style="margin:0; font-size:11px; color:var(--text-muted);">${State.cart.length} item(s) • Tax & Discount Synced</p>
             </div>
           </div>
           <button class="modal-close-btn" onclick="closeModal()">×</button>
@@ -11090,13 +11523,41 @@
         <form onsubmit="event.preventDefault(); processPOSSale();">
           <div class="modal-body" style="gap:14px;">
             <!-- Amount Due Banner -->
-            <div style="background:var(--item-bg); padding:12px 16px; border-radius:10px; border:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
+            <div id="checkoutAmountBanner" style="background:var(--item-bg); padding:12px 16px; border-radius:10px; border:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
               <div>
                 <div style="font-size:12px; color:var(--text-muted); font-weight:600;">Total Amount Due:</div>
-                <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Subtotal: ${formatMoney(subtotal)} + Tax (${taxRate}%): ${formatMoney(tax)}</div>
+                <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">
+                  Subtotal: ${formatMoney(totals.subtotal)}
+                  ${totals.discount > 0 ? ` • Disc: -${formatMoney(totals.discount)}` : ''}
+                  ${totals.taxEnabled && totals.tax > 0 ? ` • ${totals.taxName} (${totals.taxRate}%${totals.taxMode === 'inclusive' ? ' incl.' : ''}): ${formatMoney(totals.tax)}` : ''}
+                </div>
               </div>
-              <div style="font-size:24px; font-weight:800; color:var(--primary);">${formatMoney(grandTotal)}</div>
+              <div style="font-size:24px; font-weight:800; color:var(--primary);">${formatMoney(totals.grandTotal)}</div>
             </div>
+
+            <!-- Interactive Checkout Discount Bar -->
+            ${s.discountEnabled !== false ? `
+              <div style="background:var(--card-bg, var(--bg-surface)); border:1px solid var(--border-color); border-radius:10px; padding:10px 14px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <label class="form-label" style="margin:0; font-weight:700; font-size:12px; display:flex; align-items:center; gap:6px;">
+                    <span>🏷️</span> Order Discount
+                  </label>
+                  <span id="checkoutDiscountDisplay" style="font-size:11.5px; font-weight:700; color:${totals.discount > 0 ? 'var(--success)' : 'var(--text-muted)'}; font-family:'JetBrains Mono';">
+                    ${totals.discount > 0 ? `-${formatMoney(totals.discount)} (${totals.discountVal}${totals.discountType === 'percent' ? '%' : ''})` : '0% (None)'}
+                  </span>
+                </div>
+                <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+                  <button type="button" class="pill-btn ${(totals.discountVal === 0) ? 'active' : ''}" onclick="onCheckoutDiscountChange(0, 'percent')" style="padding:4px 10px; font-size:11.5px; border:1px solid var(--border-color);">0%</button>
+                  ${presets.map(p => `
+                    <button type="button" class="pill-btn ${(totals.discountVal === p && totals.discountType === 'percent') ? 'active' : ''}" onclick="onCheckoutDiscountChange(${p}, 'percent')" style="padding:4px 10px; font-size:11.5px; border:1px solid var(--border-color);">${p}%</button>
+                  `).join('')}
+                  <div style="display:inline-flex; align-items:center; gap:4px; margin-left:6px;">
+                    <input type="number" id="checkoutCustomDiscountInput" class="form-input" style="width:78px; padding:3px 8px; font-size:11.5px; height:26px;" placeholder="Custom" min="0" max="${s.maxDiscount ?? 100}" value="${(!presets.includes(totals.discountVal) && totals.discountVal > 0) ? totals.discountVal : ''}" oninput="onCheckoutCustomDiscountInput(this.value)">
+                    <span style="font-size:11px; color:var(--text-muted); font-weight:600;">%</span>
+                  </div>
+                </div>
+              </div>
+            ` : ''}
 
             <!-- Customer Details Card -->
             <div style="background:var(--card-bg, var(--bg-surface)); border:1px solid var(--border-color); border-radius:10px; padding:14px;">
@@ -11160,8 +11621,11 @@
               </div>
 
               <div class="form-group" style="margin:0;">
-                <label class="form-label">Amount Tendered / Paid ($)</label>
-                <input type="number" step="0.01" id="checkoutAmountPaid" class="form-input" value="${grandTotal}" required>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                  <label class="form-label" style="margin:0;">Amount Tendered / Paid (${State.settings.currencySymbol || '$'})</label>
+                  <span id="checkoutChangeOrBalance" style="font-size:11px;"></span>
+                </div>
+                <input type="number" step="0.01" id="checkoutAmountPaid" class="form-input" value="${totals.grandTotal}" required oninput="onCheckoutTenderedInput()">
               </div>
             </div>
           </div>
@@ -11173,7 +11637,91 @@
           </div>
         </form>
       `);
+      onCheckoutTenderedInput();
     }
+
+    function onCheckoutDiscountChange(val, type = 'percent') {
+      State.posDiscount = { type, value: Math.max(0, Number(val) || 0) };
+      refreshCheckoutTotals();
+      const totalsArea = document.getElementById('posCartTotalsArea');
+      if (totalsArea) totalsArea.innerHTML = renderPOSCartTotals();
+    }
+    window.onCheckoutDiscountChange = onCheckoutDiscountChange;
+
+    function onCheckoutCustomDiscountInput(val) {
+      const maxD = State.settings?.maxDiscount ?? 100;
+      const num = Math.max(0, Math.min(maxD, Number(val) || 0));
+      State.posDiscount = { type: 'percent', value: num };
+      refreshCheckoutTotals();
+      const totalsArea = document.getElementById('posCartTotalsArea');
+      if (totalsArea) totalsArea.innerHTML = renderPOSCartTotals();
+    }
+    window.onCheckoutCustomDiscountInput = onCheckoutCustomDiscountInput;
+
+    function refreshCheckoutTotals() {
+      const subtotal = State.cart.reduce((sum, i) => sum + i.total, 0);
+      const totals = computeOrderTotals(subtotal, State.posDiscount);
+
+      const banner = document.getElementById('checkoutAmountBanner');
+      if (banner) {
+        banner.innerHTML = `
+          <div>
+            <div style="font-size:12px; color:var(--text-muted); font-weight:600;">Total Amount Due:</div>
+            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">
+              Subtotal: ${formatMoney(totals.subtotal)}
+              ${totals.discount > 0 ? ` • Disc: -${formatMoney(totals.discount)}` : ''}
+              ${totals.taxEnabled && totals.tax > 0 ? ` • ${totals.taxName} (${totals.taxRate}%${totals.taxMode === 'inclusive' ? ' incl.' : ''}): ${formatMoney(totals.tax)}` : ''}
+            </div>
+          </div>
+          <div style="font-size:24px; font-weight:800; color:var(--primary);">${formatMoney(totals.grandTotal)}</div>
+        `;
+      }
+
+      const discDisplay = document.getElementById('checkoutDiscountDisplay');
+      if (discDisplay) {
+        discDisplay.style.color = totals.discount > 0 ? 'var(--success)' : 'var(--text-muted)';
+        discDisplay.innerText = totals.discount > 0 ? `-${formatMoney(totals.discount)} (${totals.discountVal}${totals.discountType === 'percent' ? '%' : ''})` : '0% (None)';
+      }
+
+      // Update pill buttons active state in checkout modal
+      const modal = document.getElementById('activeModalOverlay');
+      if (modal) {
+        const pills = modal.querySelectorAll('.pill-btn');
+        pills.forEach(btn => {
+          const btnTxt = btn.innerText.trim();
+          if (btnTxt === `${totals.discountVal}%` && totals.discountType === 'percent') {
+            btn.classList.add('active');
+          } else {
+            btn.classList.remove('active');
+          }
+        });
+      }
+
+      const paidInput = document.getElementById('checkoutAmountPaid');
+      if (paidInput) {
+        paidInput.value = totals.grandTotal;
+      }
+
+      onCheckoutTenderedInput();
+    }
+    window.refreshCheckoutTotals = refreshCheckoutTotals;
+
+    function onCheckoutTenderedInput() {
+      const subtotal = State.cart.reduce((sum, i) => sum + i.total, 0);
+      const totals = computeOrderTotals(subtotal, State.posDiscount);
+      const paid = Number(document.getElementById('checkoutAmountPaid')?.value || totals.grandTotal);
+      const changeBalEl = document.getElementById('checkoutChangeOrBalance');
+      if (changeBalEl) {
+        if (paid >= totals.grandTotal) {
+          const change = Math.round((paid - totals.grandTotal) * 100) / 100;
+          changeBalEl.innerHTML = `<span style="color:var(--success); font-weight:700;">Change: ${formatMoney(change)}</span>`;
+        } else {
+          const bal = Math.round((totals.grandTotal - paid) * 100) / 100;
+          changeBalEl.innerHTML = `<span style="color:var(--danger); font-weight:700;">Balance: ${formatMoney(bal)}</span>`;
+        }
+      }
+    }
+    window.onCheckoutTenderedInput = onCheckoutTenderedInput;
 
     // Interactive helper for Customer selector dropdown in checkout modal
     function onCheckoutCustomerSelectChange(val) {
@@ -11241,11 +11789,13 @@
 
     async function processPOSSale() {
       const subtotal = State.cart.reduce((sum, i) => sum + i.total, 0);
-      const taxRate = State.settings.defaultTax || 8.5;
-      const tax = Math.round(subtotal * (taxRate / 100) * 100) / 100;
-      const grandTotal = subtotal + tax;
+      const totals = computeOrderTotals(subtotal, State.posDiscount);
+      const grandTotal = totals.grandTotal;
+      const tax = totals.tax;
+      const discount = totals.discount;
       const cogs = State.cart.reduce((sum, i) => sum + (i.cost * i.qty), 0);
-      const grossProfit = grandTotal - tax - cogs;
+      const netRevenue = totals.taxMode === 'inclusive' ? (grandTotal - tax) : totals.discountedSubtotal;
+      const grossProfit = netRevenue - cogs;
 
       const method = document.getElementById('checkoutMethod').value;
       const amountPaid = Number(document.getElementById('checkoutAmountPaid').value);
@@ -11365,9 +11915,14 @@
         customerBusiness: cust.business || '',
         date,
         items: [...State.cart],
-        subtotal,
-        tax,
-        discount: 0,
+        subtotal: totals.subtotal,
+        tax: totals.tax,
+        taxRate: totals.taxRate,
+        taxName: totals.taxName,
+        taxMode: totals.taxMode,
+        discount: totals.discount,
+        discountRate: totals.discountVal,
+        discountType: totals.discountType,
         total: grandTotal,
         paid: amountPaid,
         balance,
@@ -11389,9 +11944,14 @@
         date,
         dueDate: date,
         items: [...State.cart],
-        subtotal,
-        tax,
-        discount: 0,
+        subtotal: totals.subtotal,
+        tax: totals.tax,
+        taxRate: totals.taxRate,
+        taxName: totals.taxName,
+        taxMode: totals.taxMode,
+        discount: totals.discount,
+        discountRate: totals.discountVal,
+        discountType: totals.discountType,
         total: grandTotal,
         paid: amountPaid,
         balance,
@@ -11437,8 +11997,10 @@
         });
       }
 
-      // 5. Reset Cart & Update
+      // 5. Reset Cart & Restore Default Discount
       State.cart = [];
+      const defaultD = State.settings?.defaultDiscount || 0;
+      State.posDiscount = { type: State.settings?.discountType || 'percent', value: defaultD };
       await loadStateFromDB();
       closeModal();
 
@@ -11665,16 +12227,16 @@
                   <span>Subtotal</span>
                   <span style="font-family:'JetBrains Mono';">${formatMoney(inv.subtotal)}</span>
                 </div>
-                ${State.settings.showTax !== false ? `
-                  <div class="inv-min-totals-row">
-                    <span>Tax (${State.settings.defaultTax || 8.5}%)</span>
-                    <span style="font-family:'JetBrains Mono';">${formatMoney(inv.tax)}</span>
-                  </div>
-                ` : ''}
                 ${inv.discount ? `
                   <div class="inv-min-totals-row" style="color:#16a34a;">
-                    <span>Discount</span>
+                    <span>Discount ${inv.discountRate ? `(${inv.discountRate}${inv.discountType === 'fixed' ? (State.settings.currencySymbol || '$') : '%'})` : ''}</span>
                     <span style="font-family:'JetBrains Mono';">-${formatMoney(inv.discount)}</span>
+                  </div>
+                ` : ''}
+                ${(State.settings.showTax !== false && (inv.tax > 0 || inv.taxRate > 0 || State.settings.taxEnabled !== false)) ? `
+                  <div class="inv-min-totals-row">
+                    <span>${inv.taxName || State.settings.taxName || 'Sales Tax'} (${inv.taxRate !== undefined ? inv.taxRate : (State.settings.defaultTax || 8.5)}%${(inv.taxMode || State.settings.taxType) === 'inclusive' ? ' incl.' : ''})</span>
+                    <span style="font-family:'JetBrains Mono';">${formatMoney(inv.tax)}</span>
                   </div>
                 ` : ''}
                 <div class="inv-min-totals-row inv-min-totals-grand">
@@ -11801,16 +12363,16 @@
                 <span>SUBTOTAL:</span>
                 <span>${formatMoney(inv.subtotal)}</span>
               </div>
-              ${State.settings.showTax !== false ? `
-                <div style="display:flex; justify-content:space-between;">
-                  <span>TAX / GST (${State.settings.defaultTax || 8.5}%):</span>
-                  <span>${formatMoney(inv.tax)}</span>
+              ${inv.discount ? `
+                <div style="display:flex; justify-content:space-between; color:#16a34a;">
+                  <span>DISCOUNT ${inv.discountRate ? `(${inv.discountRate}${inv.discountType === 'fixed' ? '' : '%'})` : ''}:</span>
+                  <span>-${formatMoney(inv.discount)}</span>
                 </div>
               ` : ''}
-              ${inv.discount ? `
+              ${(State.settings.showTax !== false && (inv.tax > 0 || inv.taxRate > 0 || State.settings.taxEnabled !== false)) ? `
                 <div style="display:flex; justify-content:space-between;">
-                  <span>DISCOUNT:</span>
-                  <span>-${formatMoney(inv.discount)}</span>
+                  <span>${(inv.taxName || State.settings.taxName || 'TAX / GST').toUpperCase()} (${inv.taxRate !== undefined ? inv.taxRate : (State.settings.defaultTax || 8.5)}%${(inv.taxMode || State.settings.taxType) === 'inclusive' ? ' INCL.' : ''}):</span>
+                  <span>${formatMoney(inv.tax)}</span>
                 </div>
               ` : ''}
             </div>
@@ -12681,6 +13243,9 @@
       if (!inv) return;
       const sym = State.settings.currencySymbol || '$';
       const currentNormStatus = getInvoiceNormalizedStatus(inv);
+      const subtotal = Number(inv.subtotal !== undefined ? inv.subtotal : (inv.total - (inv.tax || 0) + (inv.discount || 0)));
+      const discount = Number(inv.discount || 0);
+      const tax = Number(inv.tax || 0);
 
       openModal(`
         <div class="modal-header">
@@ -12692,29 +13257,44 @@
             <div class="form-grid-2">
               <div class="form-group">
                 <label class="form-label">Customer</label>
-                <input type="text" class="form-input" value="${inv.customer?.name || 'Walk-in'}" disabled style="opacity:0.8;">
+                <input type="text" class="form-input" value="${inv.customer?.name || inv.customerName || 'Walk-in'}" disabled style="opacity:0.8;">
               </div>
               <div class="form-group">
                 <label class="form-label">Payment Status *</label>
-                <select id="mEditInvStatus" class="form-select" onchange="handleEditInvStatusChange(this.value, ${inv.total})">
+                <select id="mEditInvStatus" class="form-select" onchange="handleEditInvStatusChange(this.value)">
                   <option value="Paid" ${currentNormStatus === 'Paid' ? 'selected' : ''}>Paid</option>
                   <option value="Partial" ${currentNormStatus === 'Partial' ? 'selected' : ''}>Partial</option>
                   <option value="Unpaid" ${currentNormStatus === 'Unpaid' ? 'selected' : ''}>Unpaid</option>
                 </select>
               </div>
+
+              <!-- Synchronized Subtotal, Discount & Tax Controls -->
               <div class="form-group">
-                <label class="form-label">Grand Total (${sym})</label>
-                <input type="number" step="0.01" id="mEditInvTotal" class="form-input" value="${inv.total}" required oninput="calculateEditInvBalance()">
+                <label class="form-label">Subtotal (${sym}) *</label>
+                <input type="number" step="0.01" id="mEditInvSubtotal" class="form-input" value="${subtotal}" required oninput="calculateEditInvTotals()">
               </div>
               <div class="form-group">
-                <label class="form-label">Amount Paid (${sym})</label>
-                <input type="number" step="0.01" id="mEditInvPaid" class="form-input" value="${inv.paid}" required oninput="calculateEditInvBalance()">
+                <label class="form-label">Discount Amount (${sym})</label>
+                <input type="number" step="0.01" id="mEditInvDiscount" class="form-input" value="${discount}" min="0" oninput="calculateEditInvTotals()">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Tax Amount (${sym})</label>
+                <input type="number" step="0.01" id="mEditInvTax" class="form-input" value="${tax}" min="0" oninput="calculateEditInvTotals()">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Calculated Grand Total (${sym})</label>
+                <input type="number" step="0.01" id="mEditInvTotal" class="form-input" value="${inv.total}" required readonly style="font-weight:800; background:var(--item-bg); color:var(--primary);">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Amount Paid (${sym}) *</label>
+                <input type="number" step="0.01" id="mEditInvPaid" class="form-input" value="${inv.paid}" required oninput="calculateEditInvTotals()">
               </div>
               <div class="form-group">
                 <label class="form-label">Due Date</label>
                 <input type="date" id="mEditInvDueDate" class="form-input" value="${(inv.dueDate || inv.date || '').slice(0,10)}">
               </div>
-              <div class="form-group">
+              <div class="form-group" style="grid-column: span 2;">
                 <label class="form-label">Calculated Balance Due</label>
                 <input type="text" id="mEditInvBalanceDisplay" class="form-input" value="${formatMoney(inv.balance)}" disabled style="font-weight:700; color:var(--danger);">
               </div>
@@ -12728,18 +13308,26 @@
       `);
     }
 
-    function handleEditInvStatusChange(status, total) {
+    function handleEditInvStatusChange(status) {
+      const total = Number(document.getElementById('mEditInvTotal')?.value || 0);
       const paidInput = document.getElementById('mEditInvPaid');
       if (!paidInput) return;
       if (status === 'Paid') paidInput.value = total;
       else if (status === 'Unpaid') paidInput.value = 0;
-      calculateEditInvBalance();
+      calculateEditInvTotals();
     }
 
-    function calculateEditInvBalance() {
-      const total = Number(document.getElementById('mEditInvTotal')?.value || 0);
+    function calculateEditInvTotals() {
+      const sub = Math.max(0, Number(document.getElementById('mEditInvSubtotal')?.value || 0));
+      const disc = Math.max(0, Number(document.getElementById('mEditInvDiscount')?.value || 0));
+      const tax = Math.max(0, Number(document.getElementById('mEditInvTax')?.value || 0));
+      const grandTotal = Math.max(0, Math.round((sub - disc + tax) * 100) / 100);
+
+      const totalInput = document.getElementById('mEditInvTotal');
+      if (totalInput) totalInput.value = grandTotal;
+
       const paid = Number(document.getElementById('mEditInvPaid')?.value || 0);
-      const bal = Math.max(0, total - paid);
+      const bal = Math.max(0, Math.round((grandTotal - paid) * 100) / 100);
       const balDisp = document.getElementById('mEditInvBalanceDisplay');
       if (balDisp) balDisp.value = formatMoney(bal);
     }
@@ -12749,12 +13337,18 @@
       if (!inv) return;
 
       const status = document.getElementById('mEditInvStatus')?.value || getInvoiceNormalizedStatus(inv);
-      const total = Number(document.getElementById('mEditInvTotal')?.value || inv.total);
+      const subtotal = Number(document.getElementById('mEditInvSubtotal')?.value || inv.subtotal);
+      const discount = Number(document.getElementById('mEditInvDiscount')?.value || 0);
+      const tax = Number(document.getElementById('mEditInvTax')?.value || 0);
+      const total = Number(document.getElementById('mEditInvTotal')?.value || (subtotal - discount + tax));
       const paid = Number(document.getElementById('mEditInvPaid')?.value || inv.paid);
       const dueDate = document.getElementById('mEditInvDueDate')?.value || inv.dueDate;
       const balance = Math.max(0, total - paid);
 
       inv.status = status;
+      inv.subtotal = subtotal;
+      inv.discount = discount;
+      inv.tax = tax;
       inv.total = total;
       inv.paid = paid;
       inv.balance = balance;
@@ -12766,6 +13360,9 @@
       const sale = State.sales.find(s => s.invoiceNumber === inv.id || s.id === inv.saleId);
       if (sale) {
         sale.status = (status === 'Partial' ? 'Partially Paid' : status);
+        sale.subtotal = subtotal;
+        sale.discount = discount;
+        sale.tax = tax;
         sale.total = total;
         sale.paid = paid;
         sale.balance = balance;

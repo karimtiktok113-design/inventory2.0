@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Background rounded squircle gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+
+    <!-- Top facet cyan-to-blue gradient -->
+    <linearGradient id="topCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="50%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+
+    <!-- Mid layer violet gradient -->
+    <linearGradient id="midViolet" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#4f46e5"/>
+    </linearGradient>
+
+    <!-- Deep purple-indigo side gradient -->
+    <linearGradient id="deepIndigo" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#312e81"/>
+    </linearGradient>
+
+    <!-- Neon Edge Glow -->
+    <linearGradient id="neonCyan" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+
+    <!-- Sphere / Dot Gradient -->
+    <radialGradient id="sphereGrad" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#67e8f9"/>
+      <stop offset="45%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#4338ca"/>
+    </radialGradient>
+
+    <!-- Ambient Shadow Filter -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#0284c7" flood-opacity="0.45"/>
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#8b5cf6" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Squircle Base -->
+  <rect x="24" y="24" width="464" height="464" rx="112" fill="url(#bgGrad)" stroke="rgba(56, 189, 248, 0.25)" stroke-width="6"/>
+
+  <g filter="url(#glow)">
+    <!-- Layer 3: Bottom Isometric Slab -->
+    <path d="M 148 316 L 256 376 L 364 316 L 364 346 L 256 406 L 148 346 Z" fill="url(#deepIndigo)" stroke="#818cf8" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M 148 316 L 256 376 L 256 406 L 148 346 Z" fill="url(#deepIndigo)" opacity="0.9"/>
+    <path d="M 256 376 L 364 316 L 364 346 L 256 406 Z" fill="#312e81"/>
+
+    <!-- Layer 2: Middle Isometric Slab -->
+    <path d="M 148 246 L 256 306 L 364 246 L 364 276 L 256 336 L 148 276 Z" fill="url(#midViolet)" stroke="#a5b4fc" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M 148 246 L 256 306 L 256 336 L 148 276 Z" fill="url(#midViolet)" opacity="0.95"/>
+    <path d="M 256 306 L 364 246 L 364 276 L 256 336 Z" fill="#4338ca"/>
+
+    <!-- Layer 1: Top Sculpted Slab forming the 'i' stem recess -->
+    <!-- Top Face -->
+    <path d="M 256 128 L 364 188 L 306 220 L 256 192 L 206 220 L 148 188 Z" fill="url(#topCyan)" stroke="#38bdf8" stroke-width="4" stroke-linejoin="round"/>
+    <!-- Left Face -->
+    <path d="M 148 188 L 256 248 L 256 280 L 148 220 Z" fill="url(#topCyan)" opacity="0.85" stroke="#38bdf8" stroke-width="3"/>
+    <!-- Right Face -->
+    <path d="M 256 248 L 364 188 L 364 220 L 256 280 Z" fill="#0284c7" stroke="#38bdf8" stroke-width="3"/>
+
+    <!-- Central 'i' Column / Nexus Core rising through the slabs -->
+    <path d="M 276 210 L 324 238 L 324 374 L 276 348 Z" fill="url(#midViolet)" stroke="#c084fc" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M 276 210 L 304 194 L 352 222 L 324 238 Z" fill="#c084fc" opacity="0.9"/>
+    <path d="M 324 238 L 352 222 L 352 358 L 324 374 Z" fill="#7e22ce"/>
+
+    <!-- The Glowing 'i' Dot Sphere -->
+    <circle cx="304" cy="162" r="32" fill="url(#sphereGrad)" stroke="#e0e7ff" stroke-width="4"/>
+    <!-- Sphere Specular Glint -->
+    <ellipse cx="294" cy="152" rx="10" ry="7" fill="#ffffff" opacity="0.85" transform="rotate(-25 294 152)"/>
+  </g>
+</svg>

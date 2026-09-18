@@ -1,0 +1,1710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory Management Pro — Design Concepts Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================================================
+       GLOBAL SWITCHER BAR & BASE RESET
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0f172a;
+      color: #334155;
+      overflow-x: hidden;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top Comparison Banner */
+    .top-concept-bar {
+      position: sticky;
+      top: 0;
+      z-index: 9999;
+      background: #090d16;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 10px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
+    .top-concept-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #f8fafc;
+    }
+
+    .top-concept-info .badge-pill {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .top-concept-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    .concept-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #1e293b;
+      padding: 4px;
+      border-radius: 10px;
+      border: 1px solid #334155;
+    }
+
+    .concept-btn {
+      border: none;
+      background: transparent;
+      color: #94a3b8;
+      padding: 7px 14px;
+      border-radius: 7px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .concept-btn:hover {
+      color: #f8fafc;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .concept-btn.active {
+      background: #3b82f6;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+    }
+
+    .theme-toggle-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #e2e8f0;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .theme-toggle-btn:hover {
+      background: #334155;
+    }
+
+    /* Container for the rendered prototype */
+    .app-viewport {
+      width: 100%;
+      min-height: calc(100vh - 56px);
+      transition: all 0.3s ease;
+    }
+
+    /* ==========================================================================
+       APP SHELL COMMON LAYOUT
+       ========================================================================== */
+    .app-shell {
+      display: flex;
+      min-height: calc(100vh - 56px);
+      width: 100%;
+    }
+
+    /* Sidebar */
+    .app-sidebar {
+      width: 270px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 100;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar-brand {
+      padding: 20px 22px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .brand-logo-box {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+      color: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+
+    .brand-text h1 {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+
+    .brand-text p {
+      font-size: 11px;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 16px 12px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-section-title {
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #64748b;
+      padding: 12px 12px 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #94a3b8;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+
+    .nav-item:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .nav-item.active {
+      font-weight: 600;
+    }
+
+    .nav-item .nav-icon {
+      font-size: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      opacity: 0.9;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+    }
+
+    /* Fixed bottom About Developer section */
+    .sidebar-footer {
+      padding: 14px 12px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .about-dev-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .about-dev-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .dev-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f59e0b, #ec4899);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: white;
+      font-weight: 700;
+    }
+
+    .dev-info h4 {
+      font-size: 12px;
+      font-weight: 600;
+      color: #f1f5f9;
+    }
+    .dev-info p {
+      font-size: 10px;
+      color: #94a3b8;
+    }
+
+    /* Main Area */
+    .app-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      background: var(--bg-workspace);
+    }
+
+    /* Header */
+    .app-header {
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      background: var(--header-bg);
+      border-bottom: 1px solid var(--border-color);
+      gap: 20px;
+    }
+
+    .header-search {
+      flex: 1;
+      max-width: 440px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 40px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 10px;
+      padding: 0 40px 0 38px;
+      font-size: 13.5px;
+      color: var(--text-primary);
+      transition: all 0.2s;
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px var(--accent-light);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .search-kbd {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--kbd-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-action-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 600;
+      color: white;
+      background: var(--accent-color);
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 2px 10px var(--accent-shadow);
+      transition: all 0.2s;
+    }
+    .btn-action-primary:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.08);
+    }
+
+    .header-icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 9px;
+      border: 1px solid var(--border-color);
+      background: var(--card-bg);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      font-size: 15px;
+      transition: all 0.2s;
+    }
+    .header-icon-btn:hover {
+      background: var(--hover-bg);
+      color: var(--text-primary);
+    }
+
+    .notif-badge-bubble {
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      background: #ef4444;
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--card-bg);
+    }
+
+    /* Workspace Content */
+    .app-content {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      flex: 1;
+    }
+
+    /* Breadcrumbs / Page Title Banner */
+    .content-title-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .title-area h2 {
+      font-size: 23px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+    }
+
+    .title-area p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .date-filter-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 4px;
+      border-radius: 9px;
+    }
+
+    .filter-chip {
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      border: none;
+      background: transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-chip.active {
+      background: var(--accent-light);
+      color: var(--accent-color);
+    }
+    .filter-chip:hover:not(.active) {
+      color: var(--text-primary);
+    }
+
+    /* KPI Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .kpi-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--card-radius);
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--card-hover-shadow);
+    }
+
+    .kpi-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .kpi-label {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .kpi-icon-box {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .kpi-value {
+      font-size: 27px;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .kpi-footer {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .trend-up {
+      color: #10b981;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .trend-down {
+      color: #ef4444;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .trend-subtext {
+      color: var(--text-muted);
+    }
+
+    /* Charts & Split Section */
+    .dashboard-grid-2-1 {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+    }
+
+    .card-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--card-radius);
+      box-shadow: var(--card-shadow);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .panel-title {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .panel-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    /* SVG Chart Mockups */
+    .chart-box {
+      width: 100%;
+      height: 220px;
+      position: relative;
+    }
+
+    /* Low Stock Urgency Widget */
+    .urgency-list {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+
+    .urgency-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-radius: 9px;
+      background: var(--item-bg);
+      border: 1px solid var(--border-color);
+      transition: all 0.15s;
+    }
+    .urgency-item:hover {
+      border-color: var(--border-hover);
+    }
+
+    .urgency-info h5 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .urgency-info p {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .urgency-action {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stock-badge-pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+      letter-spacing: 0.02em;
+    }
+    .badge-out {
+      background: rgba(239, 68, 68, 0.14);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .badge-low {
+      background: rgba(245, 158, 11, 0.14);
+      color: #d97706;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    .badge-ok {
+      background: rgba(16, 185, 129, 0.14);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-reorder-mini {
+      padding: 4px 9px;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 6px;
+      background: var(--accent-light);
+      color: var(--accent-color);
+      border: 1px solid var(--accent-color);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-reorder-mini:hover {
+      background: var(--accent-color);
+      color: white;
+    }
+
+    /* Table Section */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .modern-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .modern-table th {
+      padding: 11px 14px;
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-color);
+      background: var(--table-th-bg);
+    }
+
+    .modern-table td {
+      padding: 13px 14px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
+    }
+
+    .modern-table tr:hover td {
+      background: var(--table-hover-bg);
+      color: var(--text-primary);
+    }
+
+    .prod-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .prod-img-placeholder {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      background: var(--item-bg);
+      border: 1px solid var(--border-color);
+      flex-shrink: 0;
+    }
+
+    .prod-title {
+      font-weight: 600;
+      color: var(--text-primary);
+      font-size: 13.5px;
+    }
+
+    .prod-sku {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .price-num {
+      font-weight: 600;
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+
+    /* ==========================================================================
+       DESIGN A: MODERN COLORFUL SAAS SPECIFIC STYLES
+       ========================================================================== */
+    .theme-design-a {
+      --bg-workspace: #f8fafc;
+      --header-bg: #ffffff;
+      --card-bg: #ffffff;
+      --card-radius: 16px;
+      --card-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+      --card-hover-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.1);
+      --border-color: #e2e8f0;
+      --border-hover: #cbd5e1;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --accent-color: #3b82f6;
+      --accent-light: #eff6ff;
+      --accent-shadow: rgba(59, 130, 246, 0.35);
+      --input-bg: #f1f5f9;
+      --input-border: #e2e8f0;
+      --kbd-bg: #e2e8f0;
+      --hover-bg: #f1f5f9;
+      --item-bg: #f8fafc;
+      --table-th-bg: #f8fafc;
+      --table-hover-bg: #f8fafc;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .theme-design-a .app-sidebar {
+      background: #0f172a;
+      border-right: 1px solid #1e293b;
+    }
+
+    .theme-design-a .brand-logo-box {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    }
+
+    .theme-design-a .nav-item.active {
+      background: #3b82f6;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+    }
+
+    /* Colorful gradient top-border for SaaS cards */
+    .theme-design-a .kpi-card:nth-child(1) {
+      border-top: 4px solid #3b82f6;
+    }
+    .theme-design-a .kpi-card:nth-child(1) .kpi-icon-box {
+      background: #eff6ff;
+      color: #3b82f6;
+    }
+
+    .theme-design-a .kpi-card:nth-child(2) {
+      border-top: 4px solid #10b981;
+    }
+    .theme-design-a .kpi-card:nth-child(2) .kpi-icon-box {
+      background: #ecfdf5;
+      color: #10b981;
+    }
+
+    .theme-design-a .kpi-card:nth-child(3) {
+      border-top: 4px solid #8b5cf6;
+    }
+    .theme-design-a .kpi-card:nth-child(3) .kpi-icon-box {
+      background: #f5f3ff;
+      color: #8b5cf6;
+    }
+
+    .theme-design-a .kpi-card:nth-child(4) {
+      border-top: 4px solid #f59e0b;
+    }
+    .theme-design-a .kpi-card:nth-child(4) .kpi-icon-box {
+      background: #fffbeb;
+      color: #f59e0b;
+    }
+
+
+    /* ==========================================================================
+       DESIGN B: EXECUTIVE BUSINESS & FINANCE SPECIFIC STYLES
+       ========================================================================== */
+    .theme-design-b {
+      --bg-workspace: #f4f5f7;
+      --header-bg: #ffffff;
+      --card-bg: #ffffff;
+      --card-radius: 8px;
+      --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      --card-hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --border-color: #e5e7eb;
+      --border-hover: #d1d5db;
+      --text-primary: #111827;
+      --text-secondary: #374151;
+      --text-muted: #6b7280;
+      --accent-color: #0f766e; /* Sophisticated deep teal */
+      --accent-light: #f0fdfa;
+      --accent-shadow: rgba(15, 118, 110, 0.25);
+      --input-bg: #ffffff;
+      --input-border: #d1d5db;
+      --kbd-bg: #f3f4f6;
+      --hover-bg: #f9fafb;
+      --item-bg: #f9fafb;
+      --table-th-bg: #f9fafb;
+      --table-hover-bg: #f3f4f6;
+      font-family: 'Outfit', -apple-system, sans-serif;
+    }
+
+    .theme-design-b .app-sidebar {
+      background: #18181b; /* Graphite Charcoal */
+      border-right: 1px solid #27272a;
+    }
+
+    .theme-design-b .brand-logo-box {
+      background: #27272a;
+      border: 1px solid #3f3f46;
+      color: #2dd4bf;
+    }
+
+    .theme-design-b .nav-item {
+      font-size: 12.5px;
+      padding: 8px 12px;
+      border-radius: 6px;
+    }
+
+    .theme-design-b .nav-item.active {
+      background: #27272a;
+      color: #2dd4bf;
+      border-left: 3px solid #2dd4bf;
+    }
+
+    .theme-design-b .kpi-card {
+      border: 1px solid #e5e7eb;
+      box-shadow: none;
+      background: #ffffff;
+    }
+
+    .theme-design-b .kpi-value {
+      font-size: 24px;
+      font-weight: 700;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .theme-design-b .kpi-icon-box {
+      background: #f3f4f6;
+      color: #374151;
+      border-radius: 6px;
+    }
+
+    .theme-design-b .btn-action-primary {
+      background: #18181b;
+      color: #ffffff;
+      border-radius: 6px;
+      box-shadow: none;
+    }
+    .theme-design-b .btn-action-primary:hover {
+      background: #27272a;
+    }
+
+
+    /* ==========================================================================
+       DESIGN C: PREMIUM MODERN COMMERCE SPECIFIC STYLES
+       ========================================================================== */
+    .theme-design-c {
+      --bg-workspace: #f5f3ff;
+      --header-bg: #ffffff;
+      --card-bg: #ffffff;
+      --card-radius: 14px;
+      --card-shadow: 0 4px 18px rgba(79, 70, 229, 0.06);
+      --card-hover-shadow: 0 8px 24px rgba(79, 70, 229, 0.12);
+      --border-color: #e0e7ff;
+      --border-hover: #c7d2fe;
+      --text-primary: #1e1b4b;
+      --text-secondary: #4338ca;
+      --text-muted: #6b7280;
+      --accent-color: #4f46e5; /* Deep Indigo / Purple */
+      --accent-light: #eef2ff;
+      --accent-shadow: rgba(79, 70, 229, 0.35);
+      --input-bg: #ffffff;
+      --input-border: #c7d2fe;
+      --kbd-bg: #e0e7ff;
+      --hover-bg: #eef2ff;
+      --item-bg: #f8fafc;
+      --table-th-bg: #f5f3ff;
+      --table-hover-bg: #f5f3ff;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .theme-design-c .app-sidebar {
+      background: #1e1b4b; /* Deep Indigo */
+      border-right: 1px solid #312e81;
+    }
+
+    .theme-design-c .brand-logo-box {
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+    }
+
+    .theme-design-c .nav-item.active {
+      background: #4f46e5;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+    }
+
+    .theme-design-c .kpi-card {
+      background: #ffffff;
+      border: 1px solid #e0e7ff;
+    }
+
+    .theme-design-c .kpi-card:nth-child(1) {
+      background: linear-gradient(135deg, #ffffff 60%, #eef2ff 100%);
+    }
+    .theme-design-c .kpi-card:nth-child(2) {
+      background: linear-gradient(135deg, #ffffff 60%, #ecfdf5 100%);
+    }
+
+    .theme-design-c .btn-action-primary {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      border-radius: 10px;
+    }
+
+
+    /* ==========================================================================
+       DARK MODE OVERRIDES
+       ========================================================================== */
+    body.dark-mode {
+      background: #090d16;
+    }
+
+    body.dark-mode .theme-design-a,
+    body.dark-mode .theme-design-b,
+    body.dark-mode .theme-design-c {
+      --bg-workspace: #090d16;
+      --header-bg: #0f172a;
+      --card-bg: #131d31;
+      --border-color: #1e293b;
+      --border-hover: #334155;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #64748b;
+      --input-bg: #1e293b;
+      --input-border: #334155;
+      --kbd-bg: #0f172a;
+      --hover-bg: #1e293b;
+      --item-bg: #0f172a;
+      --table-th-bg: #0f172a;
+      --table-hover-bg: #1e293b;
+      --card-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    body.dark-mode .theme-design-b {
+      --bg-workspace: #09090b;
+      --header-bg: #121215;
+      --card-bg: #18181b;
+      --border-color: #27272a;
+      --input-bg: #18181b;
+      --input-border: #27272a;
+      --hover-bg: #27272a;
+      --item-bg: #121215;
+      --table-th-bg: #121215;
+      --table-hover-bg: #27272a;
+    }
+
+    /* POS Quick Pill Banner in Design C */
+    .pos-quick-pill {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: #4f46e5;
+      color: white;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .theme-design-c .pos-quick-pill {
+      display: flex;
+    }
+
+    /* Comparison Notes Drawer */
+    .concept-summary-card {
+      margin-top: 10px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--card-radius);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .concept-summary-text h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .concept-summary-text p {
+      font-size: 12px;
+      color: var(--text-muted);
+      max-width: 700px;
+    }
+
+    .approval-callout {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Micro Progress Bar */
+    .stock-meter-bar {
+      width: 100px;
+      height: 6px;
+      background: var(--border-color);
+      border-radius: 999px;
+      overflow: hidden;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    .stock-meter-fill {
+      height: 100%;
+      border-radius: 999px;
+    }
+
+    @media (max-width: 1024px) {
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .dashboard-grid-2-1 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .app-sidebar {
+        display: none;
+      }
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+      .app-content {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       STICKY DESIGN CONCEPT SWITCHER (FOR CLIENT EVALUATION & APPROVAL)
+       ========================================================================== -->
+  <header class="top-concept-bar">
+    <div class="top-concept-info">
+      <span class="badge-pill">Phase 1 Design Review</span>
+      <span class="top-concept-title">Inventory Management Pro — Live Interactive Design Concepts</span>
+    </div>
+
+    <div class="concept-btn-group">
+      <button class="concept-btn active" id="btnConceptA" onclick="switchConcept('a')">
+        <span>✨</span> Design A: Modern Colorful SaaS
+      </button>
+      <button class="concept-btn" id="btnConceptB" onclick="switchConcept('b')">
+        <span>🏛️</span> Design B: Executive Business
+      </button>
+      <button class="concept-btn" id="btnConceptC" onclick="switchConcept('c')">
+        <span>🛍️</span> Design C: Premium Commerce & POS
+      </button>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <button class="theme-toggle-btn" onclick="toggleDarkMode()">
+        <span id="themeIcon">🌙</span> <span id="themeText">Dark Mode</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       MAIN INTERACTIVE APPLICATION SHELL PREVIEW
+       ========================================================================== -->
+  <div class="app-viewport theme-design-a" id="appViewport">
+    <div class="app-shell">
+      
+      <!-- ================= SIDEBAR NAVIGATION ================= -->
+      <aside class="app-sidebar">
+        <div class="sidebar-brand">
+          <div class="brand-logo-box" id="brandLogo">IMP</div>
+          <div class="brand-text">
+            <h1 id="brandName">Inventory Pro</h1>
+            <p>Small Business Suite</p>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <div class="nav-section-title">Overview</div>
+          <a class="nav-item active">
+            <span class="nav-icon">📊</span>
+            <span>Dashboard</span>
+          </a>
+
+          <div class="nav-section-title">Inventory & Stock</div>
+          <a class="nav-item">
+            <span class="nav-icon">📦</span>
+            <span>Products</span>
+            <span class="nav-badge" style="background:#3b82f6; color:white;">128</span>
+          </a>
+          <a class="nav-item">
+            <span class="nav-icon">🗂</span>
+            <span>Categories</span>
+          </a>
+          <a class="nav-item">
+            <span class="nav-icon">🏷</span>
+            <span>Brands</span>
+          </a>
+          <a class="nav-item">
+            <span class="nav-icon">📥</span>
+            <span>Stock Control</span>
+          </a>
+          <a class="nav-item">
+            <span class="nav-icon">🔄</span>
+            <span>Stock Movements</span>
+          </a>
+          <a class="nav-item">
+            <span class="nav-icon">⚠️</span>
+            <span>Low Stock / Reorder</span>
+            <span class="nav-badge" style="background:#ef4444; color:white;">6</span>
+          </a>
+
+          <div class="nav-section-title">Sales & Orders</div>
+          <a class="nav-item">
+            <span class="nav-icon">🛒</span>
+            <span>New Sale / POS</span>
+          </a>
+          <a class="nav-item">
+            <span class="nav-icon">📋</span>
+            <span>Sales History</span>
+          </a>
+          <a class="nav-item">
+            <span class="nav-icon">↩</span>
+            <span>Sales Returns</span>
+          </a>
+          <a class="nav-item">
+            <span class="nav-icon">🧾</span>
+            <span>Invoices</span>
+          </a>
+
+          <div class="nav-section-title">Procurement</div>
+          <a class="nav-item">
+            <span class="nav-icon">🚚</span>
+            <span>New Purchase</span>
+          </a>
+          <a class="nav-item">
+            <span class="nav-icon">📦</span>
+            <span>Purchase History</span>
+          </a>
+          <a class="nav-item">
+            <span class="nav-icon">↪</span>
+            <span>Purchase Returns</span>
+          </a>
+
+          <div class="nav-section-title">Contacts & CRM</div>
+          <a class="nav-item">
+            <span class="nav-icon">👥</span>
+            <span>Customers</span>
+          </a>
+          <a class="nav-item">
+            <span class="nav-icon">🏭</span>
+            <span>Suppliers</span>
+          </a>
+
+          <div class="nav-section-title">Finance & Books</div>
+          <a class="nav-item">
+            <span class="nav-icon">💵</span>
+            <span>Payments</span>
+          </a>
+          <a class="nav-item">
+            <span class="nav-icon">💸</span>
+            <span>Expenses</span>
+          </a>
+          <a class="nav-item">
+            <span class="nav-icon">📈</span>
+            <span>Profit & Loss</span>
+          </a>
+
+          <div class="nav-section-title">Intelligence</div>
+          <a class="nav-item">
+            <span class="nav-icon">📊</span>
+            <span>Business Analytics</span>
+          </a>
+          <a class="nav-item">
+            <span class="nav-icon">📦</span>
+            <span>Inventory Analytics</span>
+          </a>
+          <a class="nav-item">
+            <span class="nav-icon">📑</span>
+            <span>Reports Center</span>
+          </a>
+
+          <div class="nav-section-title">System & Data</div>
+          <a class="nav-item">
+            <span class="nav-icon">📤</span>
+            <span>Import / Export</span>
+          </a>
+          <a class="nav-item">
+            <span class="nav-icon">💾</span>
+            <span>Backup & Restore</span>
+          </a>
+          <a class="nav-item">
+            <span class="nav-icon">⚙️</span>
+            <span>Business Settings</span>
+          </a>
+          <a class="nav-item">
+            <span class="nav-icon">🎨</span>
+            <span>Appearance</span>
+          </a>
+        </nav>
+
+        <!-- MANDATORY FINAL ITEM: ABOUT DEVELOPER -->
+        <div class="sidebar-footer">
+          <div class="about-dev-card" title="WebCraft Goods — Premium Digital Tools & Productivity Solutions">
+            <div class="dev-avatar">WG</div>
+            <div class="dev-info">
+              <h4>WebCraft Goods</h4>
+              <p>👤 About Developer</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- ================= MAIN WORKSPACE ================= -->
+      <main class="app-main">
+        
+        <!-- Header -->
+        <header class="app-header">
+          <div class="header-search">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" placeholder="Search SKU, products, invoices, customers..." readonly>
+            <span class="search-kbd">⌘K</span>
+          </div>
+
+          <!-- Extra Quick POS pill for Design C -->
+          <div class="pos-quick-pill">
+            <span>⚡</span> Launch POS (F2)
+          </div>
+
+          <div class="header-actions">
+            <button class="header-icon-btn" title="Low Stock Alerts">
+              <span>🔔</span>
+              <span class="notif-badge-bubble">6</span>
+            </button>
+
+            <button class="header-icon-btn" title="Business Settings">
+              <span>⚙️</span>
+            </button>
+
+            <button class="btn-action-primary" id="headerPrimaryBtn">
+              <span>＋</span> <span>New Sale / POS</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="app-content">
+          
+          <!-- Concept Meta Information Banner -->
+          <div class="concept-summary-card">
+            <div class="concept-summary-text">
+              <h4 id="conceptHeading">Active Concept: Design A — Modern Colorful SaaS</h4>
+              <p id="conceptDesc">High-energy SaaS presentation with colorful KPI top accents, dark navy sidebar, crystal-clear typography (Plus Jakarta Sans), smooth interactive curves, and colorful stock badges.</p>
+            </div>
+            <div class="approval-callout">
+              <span>✓ Ready for Selection</span>
+            </div>
+          </div>
+
+          <!-- Title & Filter Bar -->
+          <div class="content-title-strip">
+            <div class="title-area">
+              <h2>Executive Dashboard</h2>
+              <p>Real-time inventory valuation, sales velocity, and profit margins</p>
+            </div>
+
+            <div class="date-filter-group">
+              <button class="filter-chip">Today</button>
+              <button class="filter-chip">7 Days</button>
+              <button class="filter-chip active">30 Days</button>
+              <button class="filter-chip">This Month</button>
+              <button class="filter-chip">This Year</button>
+            </div>
+          </div>
+
+          <!-- Dynamic KPI Cards Row -->
+          <div class="kpi-grid">
+            
+            <!-- Card 1: Revenue -->
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-label">Total Revenue</span>
+                <div class="kpi-icon-box">💰</div>
+              </div>
+              <div class="kpi-value">$48,920.50</div>
+              <div class="kpi-footer">
+                <span class="trend-up">↑ +14.8%</span>
+                <span class="trend-subtext">vs last month</span>
+              </div>
+            </div>
+
+            <!-- Card 2: Gross Profit -->
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-label">Gross Profit (Margin)</span>
+                <div class="kpi-icon-box">📈</div>
+              </div>
+              <div class="kpi-value">$21,450.00</div>
+              <div class="kpi-footer">
+                <span class="trend-up">↑ 43.8%</span>
+                <span class="trend-subtext">healthy margin</span>
+              </div>
+            </div>
+
+            <!-- Card 3: Inventory Valuation -->
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-label">Inventory Asset Value</span>
+                <div class="kpi-icon-box">📦</div>
+              </div>
+              <div class="kpi-value">$114,830.00</div>
+              <div class="kpi-footer">
+                <span style="color:var(--text-secondary); font-weight:600;">1,420 Units</span>
+                <span class="trend-subtext">across 6 categories</span>
+              </div>
+            </div>
+
+            <!-- Card 4: Low Stock Alert -->
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-label">Low Stock Alerts</span>
+                <div class="kpi-icon-box">⚠️</div>
+              </div>
+              <div class="kpi-value" style="color:#ef4444;">6 SKUs</div>
+              <div class="kpi-footer">
+                <span class="trend-down">↓ 2 Out of Stock</span>
+                <span class="trend-subtext">reorder needed</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Main Analytics & Urgency Grid -->
+          <div class="dashboard-grid-2-1">
+            
+            <!-- Chart Panel: Revenue vs Expenses -->
+            <div class="card-panel">
+              <div class="panel-header">
+                <div>
+                  <h3 class="panel-title">Revenue vs Operating Expenses</h3>
+                  <p class="panel-subtitle">Monthly breakdown with net profit trajectory</p>
+                </div>
+                <div style="display:flex; gap:12px; font-size:12px; font-weight:600;">
+                  <span style="color:#3b82f6; display:flex; align-items:center; gap:4px;">● Revenue</span>
+                  <span style="color:#ef4444; display:flex; align-items:center; gap:4px;">● Expenses</span>
+                </div>
+              </div>
+
+              <!-- SVG Curve Chart Mockup -->
+              <div class="chart-box">
+                <svg viewBox="0 0 500 200" width="100%" height="100%" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="gradRev" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.3"/>
+                      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.0"/>
+                    </linearGradient>
+                    <linearGradient id="gradExp" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.2"/>
+                      <stop offset="100%" stop-color="#ef4444" stop-opacity="0.0"/>
+                    </linearGradient>
+                  </defs>
+                  <!-- Horizontal Grid Lines -->
+                  <line x1="0" y1="40" x2="500" y2="40" stroke="rgba(150,150,150,0.15)" stroke-dasharray="4"/>
+                  <line x1="0" y1="90" x2="500" y2="90" stroke="rgba(150,150,150,0.15)" stroke-dasharray="4"/>
+                  <line x1="0" y1="140" x2="500" y2="140" stroke="rgba(150,150,150,0.15)" stroke-dasharray="4"/>
+                  <line x1="0" y1="180" x2="500" y2="180" stroke="rgba(150,150,150,0.25)"/>
+
+                  <!-- Revenue Area & Line -->
+                  <path d="M 0,160 Q 70,120 140,110 T 280,60 T 420,40 L 500,30 L 500,180 L 0,180 Z" fill="url(#gradRev)"/>
+                  <path d="M 0,160 Q 70,120 140,110 T 280,60 T 420,40 L 500,30" fill="none" stroke="#3b82f6" stroke-width="3.5"/>
+
+                  <!-- Expense Area & Line -->
+                  <path d="M 0,170 Q 70,155 140,140 T 280,125 T 420,105 L 500,95 L 500,180 L 0,180 Z" fill="url(#gradExp)"/>
+                  <path d="M 0,170 Q 70,155 140,140 T 280,125 T 420,105 L 500,95" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="2"/>
+
+                  <!-- Markers -->
+                  <circle cx="280" cy="60" r="5" fill="#3b82f6" stroke="#fff" stroke-width="2"/>
+                  <circle cx="420" cy="40" r="5" fill="#3b82f6" stroke="#fff" stroke-width="2"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Panel: Low Stock & Reorder Urgency -->
+            <div class="card-panel">
+              <div class="panel-header">
+                <div>
+                  <h3 class="panel-title">Replenishment Alert</h3>
+                  <p class="panel-subtitle">Items below threshold</p>
+                </div>
+                <span class="stock-badge-pill badge-out">Action Req.</span>
+              </div>
+
+              <div class="urgency-list">
+                <div class="urgency-item">
+                  <div class="urgency-info">
+                    <h5>Wireless Ergonomic Mouse</h5>
+                    <p>SKU: WEM-001 • Stock: <strong>0 units</strong></p>
+                  </div>
+                  <div class="urgency-action">
+                    <span class="stock-badge-pill badge-out">Out of Stock</span>
+                    <button class="btn-reorder-mini">Reorder</button>
+                  </div>
+                </div>
+
+                <div class="urgency-item">
+                  <div class="urgency-info">
+                    <h5>Mechanical Keyboard RGB</h5>
+                    <p>SKU: MKR-004 • Stock: <strong>3 units</strong> (Min: 10)</p>
+                  </div>
+                  <div class="urgency-action">
+                    <span class="stock-badge-pill badge-low">Low Stock</span>
+                    <button class="btn-reorder-mini">Reorder</button>
+                  </div>
+                </div>
+
+                <div class="urgency-item">
+                  <div class="urgency-info">
+                    <h5>USB-C Fast Hub Pro</h5>
+                    <p>SKU: UCH-012 • Stock: <strong>4 units</strong> (Min: 12)</p>
+                  </div>
+                  <div class="urgency-action">
+                    <span class="stock-badge-pill badge-low">Low Stock</span>
+                    <button class="btn-reorder-mini">Reorder</button>
+                  </div>
+                </div>
+
+                <div class="urgency-item">
+                  <div class="urgency-info">
+                    <h5>Ultra HD Monitor 27"</h5>
+                    <p>SKU: MON-027 • Stock: <strong>2 units</strong> (Min: 8)</p>
+                  </div>
+                  <div class="urgency-action">
+                    <span class="stock-badge-pill badge-low">Low Stock</span>
+                    <button class="btn-reorder-mini">Reorder</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Product Management Table Preview -->
+          <div class="card-panel" style="padding: 0; overflow: hidden;">
+            <div style="padding: 20px 22px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; gap: 12px;">
+              <div>
+                <h3 class="panel-title">Inventory Performance & Catalog</h3>
+                <p class="panel-subtitle">Real-time stock ledger, cost vs retail valuation, and movement status</p>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button class="header-icon-btn" style="width: auto; padding: 0 12px; font-size: 12px; font-weight: 600;">Export CSV</button>
+                <button class="btn-action-primary" style="padding: 7px 14px; font-size: 12px;">＋ Add Product</button>
+              </div>
+            </div>
+
+            <div class="table-container">
+              <table class="modern-table">
+                <thead>
+                  <tr>
+                    <th>Product & SKU</th>
+                    <th>Category</th>
+                    <th>Unit Cost</th>
+                    <th>Retail Price</th>
+                    <th>In Stock</th>
+                    <th>Total Valuation</th>
+                    <th>Stock Status</th>
+                    <th style="text-align: right;">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="prod-cell">
+                        <div class="prod-img-placeholder">💻</div>
+                        <div>
+                          <div class="prod-title">Aero Pro Laptop 15"</div>
+                          <div class="prod-sku">SKU: LAP-0982 • Box</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>Electronics</td>
+                    <td class="price-num">$650.00</td>
+                    <td class="price-num">$899.00</td>
+                    <td>
+                      <div class="stock-meter-bar"><div class="stock-meter-fill" style="width:75%; background:#10b981;"></div></div>
+                      <span style="font-weight:600;">45</span> units
+                    </td>
+                    <td class="price-num" style="color:var(--text-primary); font-weight:700;">$29,250.00</td>
+                    <td><span class="stock-badge-pill badge-ok">🟢 In Stock</span></td>
+                    <td style="text-align: right;">
+                      <button class="header-icon-btn" style="display:inline-flex; width:28px; height:28px; font-size:12px;">⋮</button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <div class="prod-cell">
+                        <div class="prod-img-placeholder">🎧</div>
+                        <div>
+                          <div class="prod-title">Wireless ANC Headphones</div>
+                          <div class="prod-sku">SKU: AUD-4410 • Piece</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>Audio Gear</td>
+                    <td class="price-num">$85.00</td>
+                    <td class="price-num">$149.00</td>
+                    <td>
+                      <div class="stock-meter-bar"><div class="stock-meter-fill" style="width:85%; background:#10b981;"></div></div>
+                      <span style="font-weight:600;">112</span> units
+                    </td>
+                    <td class="price-num" style="color:var(--text-primary); font-weight:700;">$9,520.00</td>
+                    <td><span class="stock-badge-pill badge-ok">🟢 In Stock</span></td>
+                    <td style="text-align: right;">
+                      <button class="header-icon-btn" style="display:inline-flex; width:28px; height:28px; font-size:12px;">⋮</button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <div class="prod-cell">
+                        <div class="prod-img-placeholder">⌨️</div>
+                        <div>
+                          <div class="prod-title">Mechanical RGB Keyboard</div>
+                          <div class="prod-sku">SKU: MKR-004 • Box</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>Accessories</td>
+                    <td class="price-num">$45.00</td>
+                    <td class="price-num">$79.00</td>
+                    <td>
+                      <div class="stock-meter-bar"><div class="stock-meter-fill" style="width:15%; background:#d97706;"></div></div>
+                      <span style="font-weight:600; color:#d97706;">3</span> units
+                    </td>
+                    <td class="price-num" style="color:var(--text-primary); font-weight:700;">$135.00</td>
+                    <td><span class="stock-badge-pill badge-low">🟡 Low Stock</span></td>
+                    <td style="text-align: right;">
+                      <button class="header-icon-btn" style="display:inline-flex; width:28px; height:28px; font-size:12px;">⋮</button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <div class="prod-cell">
+                        <div class="prod-img-placeholder">🖱️</div>
+                        <div>
+                          <div class="prod-title">Wireless Ergonomic Mouse</div>
+                          <div class="prod-sku">SKU: WEM-001 • Piece</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>Accessories</td>
+                    <td class="price-num">$18.00</td>
+                    <td class="price-num">$34.99</td>
+                    <td>
+                      <div class="stock-meter-bar"><div class="stock-meter-fill" style="width:0%; background:#ef4444;"></div></div>
+                      <span style="font-weight:600; color:#ef4444;">0</span> units
+                    </td>
+                    <td class="price-num" style="color:var(--text-primary); font-weight:700;">$0.00</td>
+                    <td><span class="stock-badge-pill badge-out">🔴 Out of Stock</span></td>
+                    <td style="text-align: right;">
+                      <button class="header-icon-btn" style="display:inline-flex; width:28px; height:28px; font-size:12px;">⋮</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Interactive Switcher Script -->
+  <script>
+    function switchConcept(concept) {
+      const viewport = document.getElementById('appViewport');
+      const btnA = document.getElementById('btnConceptA');
+      const btnB = document.getElementById('btnConceptB');
+      const btnC = document.getElementById('btnConceptC');
+      const heading = document.getElementById('conceptHeading');
+      const desc = document.getElementById('conceptDesc');
+      const brandLogo = document.getElementById('brandLogo');
+      const headerBtn = document.getElementById('headerPrimaryBtn');
+
+      // Reset active buttons
+      btnA.classList.remove('active');
+      btnB.classList.remove('active');
+      btnC.classList.remove('active');
+
+      if (concept === 'a') {
+        btnA.classList.add('active');
+        viewport.className = 'app-viewport theme-design-a';
+        heading.innerText = 'Active Concept: Design A — Modern Colorful SaaS';
+        desc.innerText = 'High-energy SaaS presentation with colorful KPI top accents, dark navy sidebar, crystal-clear typography (Plus Jakarta Sans), smooth interactive curves, and colorful stock badges.';
+        brandLogo.style.background = 'linear-gradient(135deg, #3b82f6, #8b5cf6)';
+        headerBtn.innerHTML = '<span>＋</span> <span>New Sale / POS</span>';
+      } else if (concept === 'b') {
+        btnB.classList.add('active');
+        viewport.className = 'app-viewport theme-design-b';
+        heading.innerText = 'Active Concept: Design B — Executive Business & Corporate Finance';
+        desc.innerText = 'Minimalist executive appearance, deep graphite charcoal sidebar, hairline borders, dense tabular financial clarity, Outfit typography, and refined corporate financial authority.';
+        brandLogo.style.background = '#27272a';
+        headerBtn.innerHTML = '<span>＋</span> <span>Record Transaction</span>';
+      } else if (concept === 'c') {
+        btnC.classList.add('active');
+        viewport.className = 'app-viewport theme-design-c';
+        heading.innerText = 'Active Concept: Design C — Premium Modern Commerce & POS Powerhouse';
+        desc.innerText = 'Omnichannel retail command center, deep indigo sidebar with glowing jewel accents, instant POS terminal launcher, real-time replenishment urgency meters, and tactile retail workflows.';
+        brandLogo.style.background = 'linear-gradient(135deg, #6366f1, #a855f7)';
+        headerBtn.innerHTML = '<span>⚡</span> <span>Launch POS Terminal</span>';
+      }
+    }
+
+    function toggleDarkMode() {
+      const body = document.body;
+      const themeIcon = document.getElementById('themeIcon');
+      const themeText = document.getElementById('themeText');
+      
+      body.classList.toggle('dark-mode');
+      if (body.classList.contains('dark-mode')) {
+        themeIcon.innerText = '☀️';
+        themeText.innerText = 'Light Mode';
+      } else {
+        themeIcon.innerText = '🌙';
+        themeText.innerText = 'Dark Mode';
+      }
+    }
+  </script>
+</body>
+</html>
